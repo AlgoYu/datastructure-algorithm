@@ -36,13 +36,7 @@ public class LinkedList<E> {
     * @Return: void
     */
     public E get(int index){
-        checkRange(index);
-        Node<E> temp = head;
-        while (index > 0){
-            temp = temp.next;
-            index--;
-        }
-        return temp.element;
+        return getNode(index).element;
     }
 
     /**
@@ -87,7 +81,7 @@ public class LinkedList<E> {
     * @Return: void
     */
     private void checkRange(int index){
-        if(index < 0 || index > size){
+        if(index < 0 || index >= size){
             throw new RuntimeException("范围越界");
         }
     }
@@ -101,7 +95,9 @@ public class LinkedList<E> {
     * @Return: void
     */
     public void insert(int index, E element){
-        checkRange(index);
+        if(index < 0 || index > size){
+            throw new RuntimeException("范围越界");
+        }
         Node<E> node = new Node<>(element,null);
         if(index == 0){
             node.next = head;
@@ -123,14 +119,15 @@ public class LinkedList<E> {
     */
     public E remove(int index){
         checkRange(index);
-        int i = index - 1;
-        Node<E> temp = head;
-        while (i > 0){
-            temp = temp.next;
-            i--;
+        E element;
+        if(index == 0){
+            element = head.element;
+            head = head.next;
+        }else{
+            Node<E> node = getNode(index - 1);
+            element = node.next.element;
+            node.next = node.next.next;
         }
-        E element = temp.next.element;
-        temp.next = temp.next.next;
         size--;
         return element;
     }
