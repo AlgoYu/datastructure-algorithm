@@ -104,7 +104,7 @@ public class TwoWayLinkedList<E> {
      * @Return: void
      */
     public void add(E element){
-        if(null == first){
+        if(size == 0){
             first = new Node<>(element,null,null);
             last = first;
         }else{
@@ -180,7 +180,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 查找元素
-     * @Date: 2020/12/8
+     * @Date: 2020/12/14
      * @param element
      * @Return: int
      */
