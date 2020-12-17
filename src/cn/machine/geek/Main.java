@@ -1,6 +1,8 @@
 package cn.machine.geek;
 
-import cn.machine.geek.structure.HeadLinkedList;
+import cn.machine.geek.structure.CircleSingleLinkedList;
+import cn.machine.geek.structure.TwoWayLinkedList;
+
 
 /**
  * @Author: MachineGeek
@@ -10,12 +12,12 @@ import cn.machine.geek.structure.HeadLinkedList;
  */
 public class Main {
     public static void main(String[] args) {
-        HeadLinkedList<Integer> headLinkedList = new HeadLinkedList<>();
-        headLinkedList.add(0);
-        headLinkedList.insert(0,1);
-        headLinkedList.insert(2,5);
-        System.out.println(headLinkedList.size());
-        System.out.println(headLinkedList.get(0));
-        System.out.println(headLinkedList.get(2));
+        TwoWayLinkedList<Integer> linkedList = new TwoWayLinkedList<>();
+        linkedList.insert(0,0);
+        linkedList.insert(1,1);
+        linkedList.insert(0,-1);
+        linkedList.add(2);
+        linkedList.remove(3);
+        linkedList.remove(0);
     }
 }

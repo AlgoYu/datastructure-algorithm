@@ -2,15 +2,15 @@ package cn.machine.geek.structure;
 
 /**
  * @Author: MachineGeek
- * @Description: 双向链表
+ * @Description: 双向循环链表
  * @Email: 794763733@qq.com
- * @Date: 2020/12/14
+ * @Date: 2020/12/17
  */
-public class TwoWayLinkedList<E> {
+public class CircleTwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 内部节点
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param
      * @Return:
      */
@@ -35,7 +35,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 获取元素
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param index
      * @Return: E
      */
@@ -46,7 +46,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 边界检查
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param index
      * @Return: void
      */
@@ -59,7 +59,7 @@ public class TwoWayLinkedList<E> {
     /**
     * @Author: MachineGeek
     * @Description: 获取节点
-    * @Date: 2020/12/14
+    * @Date: 2020/12/17
      * @param index
     * @Return: cn.machine.geek.structure.TwoWayLinkedList<E>.Node<E>
     */
@@ -88,7 +88,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 返回元素数量
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param
      * @Return: int
      */
@@ -99,7 +99,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 增加元素
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param element
      * @Return: void
      */
@@ -110,7 +110,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 插入元素
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param index
      * @param element
      * @Return: void
