@@ -1,7 +1,6 @@
 package cn.machine.geek;
 
-import cn.machine.geek.structure.CircleSingleLinkedList;
-import cn.machine.geek.structure.TwoWayLinkedList;
+import cn.machine.geek.structure.CircleTwoWayLinkedList;
 
 
 /**
@@ -12,12 +11,14 @@ import cn.machine.geek.structure.TwoWayLinkedList;
  */
 public class Main {
     public static void main(String[] args) {
-        TwoWayLinkedList<Integer> linkedList = new TwoWayLinkedList<>();
+        CircleTwoWayLinkedList<Integer> linkedList = new CircleTwoWayLinkedList<>();
         linkedList.insert(0,0);
         linkedList.insert(1,1);
         linkedList.insert(0,-1);
         linkedList.add(2);
         linkedList.remove(3);
+        linkedList.remove(0);
+        linkedList.remove(0);
         linkedList.remove(0);
     }
 }
