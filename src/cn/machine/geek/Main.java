@@ -1,6 +1,7 @@
 package cn.machine.geek;
 
 import cn.machine.geek.algorithm.Josephus;
+import cn.machine.geek.structure.stack.Stack;
 
 
 /**
@@ -11,11 +12,6 @@ import cn.machine.geek.algorithm.Josephus;
  */
 public class Main {
     public static void main(String[] args) {
-        Josephus<Integer> josephus = new Josephus<>();
-        josephus.add(1);
-        josephus.add(2);
-        josephus.add(3);
-        josephus.add(4);
-        josephus.josephusProblem(4,3);
+
     }
 }

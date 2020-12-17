@@ -1,16 +1,16 @@
-package cn.machine.geek.structure;
+package cn.machine.geek.structure.linkedlist;
 
 /**
  * @Author: MachineGeek
- * @Description: 双向链表
+ * @Description: 双向循环链表
  * @Email: 794763733@qq.com
- * @Date: 2020/12/14
+ * @Date: 2020/12/17
  */
-public class TwoWayLinkedList<E> {
+public class CircleTwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 内部节点
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param
      * @Return:
      */
@@ -35,7 +35,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 获取元素
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param index
      * @Return: E
      */
@@ -46,7 +46,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 边界检查
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param index
      * @Return: void
      */
@@ -59,9 +59,9 @@ public class TwoWayLinkedList<E> {
     /**
     * @Author: MachineGeek
     * @Description: 获取节点
-    * @Date: 2020/12/14
+    * @Date: 2020/12/17
      * @param index
-    * @Return: cn.machine.geek.structure.TwoWayLinkedList<E>.Node<E>
+    * @Return: cn.machine.geek.structure.linkedlist.TwoWayLinkedList<E>.Node<E>
     */
     public Node<E> getNode(int index){
         checkRange(index);
@@ -88,7 +88,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 返回元素数量
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param
      * @Return: int
      */
@@ -99,7 +99,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 增加元素
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param element
      * @Return: void
      */
@@ -110,7 +110,7 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 插入元素
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param index
      * @param element
      * @Return: void
@@ -121,18 +121,22 @@ public class TwoWayLinkedList<E> {
         }
         if(index == size){
             Node<E> temp = last;
-            last = new Node<>(element,temp,null);
+            last = new Node<>(element,temp,first);
             if(null != last.prev){
                 last.prev.next = last;
+                first.prev = last;
             }else{
                 first = last;
+                first.prev = last;
+                last.next = first;
             }
         }else{
             Node<E> node = getNode(index);
             Node<E> temp = new Node<>(element,node.prev,node);
             node.prev = temp;
-            if(null == temp.prev){
+            if(last == temp.prev){
                 first = temp;
+                last.next = first;
             }else{
                 temp.prev.next = temp;
             }
@@ -141,12 +145,12 @@ public class TwoWayLinkedList<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 是否为空
-    * @Date: 2020/12/14
+     * @Author: MachineGeek
+     * @Description: 是否为空
+     * @Date: 2020/12/17
      * @param
-    * @Return: boolean
-    */
+     * @Return: boolean
+     */
     public boolean isEmpty(){
         return size == 0;
     }
@@ -154,21 +158,24 @@ public class TwoWayLinkedList<E> {
     /**
      * @Author: MachineGeek
      * @Description: 删除节点
-     * @Date: 2020/12/14
+     * @Date: 2020/12/17
      * @param index
      * @Return: void
      */
     public void remove(int index){
         Node<E> node = getNode(index);
-        if(null == node.prev){
-            node.next.prev = null;
-            first = node.next;
-        }else if(null == node.next){
-            node.prev.next = null;
-            last = node.prev;
+        if(size == 1){
+            first = null;
+            last = null;
         }else{
-            node.next.prev = node.prev;
             node.prev.next = node.next;
+            node.next.prev = node.prev;
+            if(first == node){
+                first = node.next;
+            }
+            if(last == node){
+                last = node.prev;
+            }
         }
         size--;
     }

@@ -1,19 +1,19 @@
-package cn.machine.geek.structure;
+package cn.machine.geek.structure.linkedlist;
 
 /**
  * @Author: MachineGeek
- * @Description: 链表-不带虚拟头节点
+ * @Description: 单项循环链表
  * @Email: 794763733@qq.com
- * @Date: 2020/12/3
+ * @Date: 2020/12/14
  */
-public class LinkedList<E> {
+public class CircleSingleLinkedList<E> {
     /**
-    * @Author: MachineGeek
-    * @Description: 内部节点
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 内部节点
+     * @Date: 2020/12/3
      * @param
-    * @Return:
-    */
+     * @Return:
+     */
     public class Node<E>{
         E element;
         Node<E> next;
@@ -29,23 +29,23 @@ public class LinkedList<E> {
     private int size;
 
     /**
-    * @Author: MachineGeek
-    * @Description: 获取元素
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 获取元素
+     * @Date: 2020/12/3
      * @param index
-    * @Return: void
-    */
+     * @Return: void
+     */
     public E get(int index){
         return getNode(index).element;
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 获取节点
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 获取节点
+     * @Date: 2020/12/3
      * @param index
-    * @Return: E
-    */
+     * @Return: E
+     */
     public Node<E> getNode(int index){
         checkRange(index);
         Node<E> temp = head;
@@ -57,12 +57,12 @@ public class LinkedList<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 增加节点
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 增加节点
+     * @Date: 2020/12/16
      * @param element
-    * @Return: void
-    */
+     * @Return: void
+     */
     public void add(E element){
         Node<E> node = new Node<>(element,null);
         if(size == 0){
@@ -70,16 +70,17 @@ public class LinkedList<E> {
         }else{
             getNode(size - 1).next = node;
         }
+        node.next = head;
         size++;
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 检查值域
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 检查值域
+     * @Date: 2020/12/16
      * @param index
-    * @Return: void
-    */
+     * @Return: void
+     */
     private void checkRange(int index){
         if(index < 0 || index >= size){
             throw new RuntimeException("范围越界");
@@ -87,20 +88,25 @@ public class LinkedList<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 插入节点
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 插入节点
+     * @Date: 2020/12/16
      * @param index
      * @param element
-    * @Return: void
-    */
+     * @Return: void
+     */
     public void insert(int index, E element){
         if(index < 0 || index > size){
             throw new RuntimeException("范围越界");
         }
         Node<E> node = new Node<>(element,null);
         if(index == 0){
-            node.next = head;
+            if(size == 0){
+                node.next = node;
+            }else{
+                node.next = head;
+                getNode(size - 1).next = node;
+            }
             head = node;
         }else{
             Node<E> temp = getNode(index - 1);
@@ -111,29 +117,34 @@ public class LinkedList<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 是否为空
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 是否为空
+     * @Date: 2020/12/16
      * @param
-    * @Return: boolean
-    */
+     * @Return: boolean
+     */
     public boolean isEmpty(){
         return size == 0;
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 删除节点
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 删除节点
+     * @Date: 2020/12/16
      * @param index
-    * @Return: E
-    */
+     * @Return: E
+     */
     public E remove(int index){
         checkRange(index);
         E element;
         if(index == 0){
             element = head.element;
-            head = head.next;
+            if(size == 1){
+                head = null;
+            }else{
+                getNode(size - 1).next = head.next;
+                head = head.next;
+            }
         }else{
             Node<E> node = getNode(index - 1);
             element = node.next.element;
@@ -144,13 +155,13 @@ public class LinkedList<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 修改元素
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 修改元素
+     * @Date: 2020/12/16
      * @param index
      * @param element
-    * @Return: E
-    */
+     * @Return: E
+     */
     public E modify(int index, E element){
         Node<E> node = getNode(index);
         E value = node.element;
@@ -159,27 +170,27 @@ public class LinkedList<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 元素数量
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 元素数量
+     * @Date: 2020/12/16
      * @param
-    * @Return: int
-    */
+     * @Return: int
+     */
     public int size(){
         return size;
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 查找元素
-    * @Date: 2020/12/3
+     * @Author: MachineGeek
+     * @Description: 查找元素
+     * @Date: 2020/12/16
      * @param element
-    * @Return: int
-    */
+     * @Return: int
+     */
     public int indexOf(E element){
         Node<E> temp = head;
         int index = 0;
-        while (temp != null){
+        while (temp != null && temp.next != head){
             if(temp.element.equals(element)){
                 return index;
             }

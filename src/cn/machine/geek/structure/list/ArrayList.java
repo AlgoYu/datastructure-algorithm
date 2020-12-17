@@ -1,4 +1,4 @@
-package cn.machine.geek.structure;
+package cn.machine.geek.structure.list;
 
 /**
  * @Author: MachineGeek
