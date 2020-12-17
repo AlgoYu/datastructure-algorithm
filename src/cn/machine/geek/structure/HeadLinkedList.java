@@ -98,13 +98,7 @@ public class HeadLinkedList<E> {
     * @Return: void
     */
     public void add(E element){
-        Node<E> node = new Node<>(element,null);
-        if(head.next == null){
-            head.next = node;
-        }else{
-            getNode(size - 1).next = node;
-        }
-        size++;
+        insert(size,element);
     }
 
     /**
@@ -129,6 +123,17 @@ public class HeadLinkedList<E> {
             pre.next = node;
         }
         size++;
+    }
+
+    /**
+     * @Author: MachineGeek
+     * @Description: 是否为空
+     * @Date: 2020/12/8
+     * @param
+     * @Return: boolean
+     */
+    public boolean isEmpty(){
+        return size == 0;
     }
 
     /**

@@ -146,6 +146,17 @@ public class CircleTwoWayLinkedList<E> {
 
     /**
      * @Author: MachineGeek
+     * @Description: 是否为空
+     * @Date: 2020/12/17
+     * @param
+     * @Return: boolean
+     */
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
+    /**
+     * @Author: MachineGeek
      * @Description: 删除节点
      * @Date: 2020/12/17
      * @param index

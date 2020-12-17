@@ -70,6 +70,17 @@ public class ArrayList<E> {
     }
 
     /**
+     * @Author: MachineGeek
+     * @Description: 是否为空
+     * @Date: 2020/12/8
+     * @param
+     * @Return: boolean
+     */
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
+    /**
     * @Author: MachineGeek
     * @Description: 删除元素
     * @Date: 2020/12/2
