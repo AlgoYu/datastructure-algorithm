@@ -141,7 +141,7 @@ public class Stack<E>{
     /**
      * @Author: MachineGeek
      * @Description: 检查范围
-     * @Date: 2020/12/2
+     * @Date: 2020/12/17
      * @param
      * @Return: void
      */
@@ -154,7 +154,7 @@ public class Stack<E>{
     /**
      * @Author: MachineGeek
      * @Description: 清空容器
-     * @Date: 2020/12/2
+     * @Date: 2020/12/17
      * @param
      * @Return: void
      */
