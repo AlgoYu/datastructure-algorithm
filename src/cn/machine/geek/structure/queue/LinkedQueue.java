@@ -1,16 +1,16 @@
-package cn.machine.geek.structure.stack;
+package cn.machine.geek.structure.queue;
 
 /**
  * @Author: MachineGeek
- * @Description: 链表栈（双向链表）
+ * @Description: 链表队列
  * @Email: 794763733@qq.com
- * @Date: 2020/12/18
+ * @Date: 2020/12/21
  */
-public class LinkedStack<E> {
+public class LinkedQueue<E> {
     /**
      * @Author: MachineGeek
      * @Description: 内部节点
-     * @Date: 2020/12/18
+     * @Date: 2020/12/21
      * @param
      * @Return:
      */
@@ -33,29 +33,9 @@ public class LinkedStack<E> {
     private int size;
 
     /**
-    * @Author: MachineGeek
-    * @Description: 弹出元素
-    * @Date: 2020/12/18
-     * @param
-    * @Return: E
-    */
-    public E pop(){
-        if(null == last){
-            throw new RuntimeException("范围越界");
-        }
-        E element = last.element;
-        if(last == first){
-            first = null;
-        }
-        last = last.prev;
-        size--;
-        return element;
-    }
-
-    /**
      * @Author: MachineGeek
      * @Description: 返回元素数量
-     * @Date: 2020/12/18
+     * @Date: 2020/12/21
      * @param
      * @Return: int
      */
@@ -64,13 +44,13 @@ public class LinkedStack<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 增加元素
-    * @Date: 2020/12/18
+     * @Author: MachineGeek
+     * @Description: 入队列
+     * @Date: 2020/12/14
      * @param element
-    * @Return: void
-    */
-    public void push(E element){
+     * @Return: void
+     */
+    public void enqueue(E element){
         if(size == 0){
             first = new Node<>(element,null,null);
             last = first;
@@ -84,11 +64,31 @@ public class LinkedStack<E> {
     /**
     * @Author: MachineGeek
     * @Description: 是否为空
-    * @Date: 2020/12/18
+    * @Date: 2020/12/14
      * @param
     * @Return: boolean
     */
     public boolean isEmpty(){
         return size == 0;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 出队列
+    * @Date: 2020/12/21
+     * @param
+    * @Return: E
+    */
+    public E dequeue(){
+        if(null == first){
+            throw new RuntimeException("范围越界");
+        }
+        E element = first.element;
+        if(first == last){
+            last = null;
+        }
+        first = first.next;
+        size--;
+        return element;
     }
 }
