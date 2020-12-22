@@ -30,10 +30,10 @@ public class ArrayList<E> {
      * @param
      * @Return:
      */
-    public ArrayList(int size){
-        size = 0;
-        if(size > CAPACITY){
-            elements = (E[]) new Object[size];
+    public ArrayList(int capacity){
+        capacity = 0;
+        if(capacity > CAPACITY){
+            elements = (E[]) new Object[capacity];
         }else{
             elements = (E[]) new Object[CAPACITY];
         }

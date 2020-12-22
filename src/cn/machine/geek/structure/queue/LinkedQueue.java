@@ -80,7 +80,7 @@ public class LinkedQueue<E> {
     * @Return: E
     */
     public E dequeue(){
-        if(null == first){
+        if(size == 0){
             throw new RuntimeException("范围越界");
         }
         E element = first.element;
