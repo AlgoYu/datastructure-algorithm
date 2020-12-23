@@ -44,11 +44,31 @@ public class CircleQueue<E> {
      * @Return: void
      */
     public void enqueue(E element){
-        if(size == elements.length){
-            throw new RuntimeException("范围越界");
-        }
+        resize(size + 1);
         elements[( head+size ) % elements.length] = element;
         size++;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 扩容
+    * @Date: 2020/12/23
+     * @param capacity
+    * @Return: void
+    */
+    private void resize(int capacity){
+        if(capacity > elements.length){
+            E[] temp = (E[]) new Object[elements.length + (elements.length >> 1)];
+            int i = 0;
+            int n = size;
+            while (i < n){
+                temp[i] = dequeue();
+                i++;
+            }
+            elements = temp;
+            head = 0;
+            size = n;
+        }
     }
 
     /**
