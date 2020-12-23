@@ -106,4 +106,19 @@ public class CircleQueue<E> {
         size--;
         return element;
     }
+
+    /**
+     * @Author: MachineGeek
+     * @Description: 清空队列
+     * @Date: 2020/12/22
+     * @param
+     * @Return: void
+     */
+    public void clear(){
+        for (int i = 0; i < size; i++){
+            elements[index(i)] = null;
+        }
+        size = 0;
+        head = 0;
+    }
 }

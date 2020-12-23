@@ -46,7 +46,7 @@ public class LinkedQueue<E> {
     /**
      * @Author: MachineGeek
      * @Description: 入队列
-     * @Date: 2020/12/14
+     * @Date: 2020/12/21
      * @param element
      * @Return: void
      */
@@ -64,7 +64,7 @@ public class LinkedQueue<E> {
     /**
     * @Author: MachineGeek
     * @Description: 是否为空
-    * @Date: 2020/12/14
+    * @Date: 2020/12/21
      * @param
     * @Return: boolean
     */
@@ -90,5 +90,18 @@ public class LinkedQueue<E> {
         first = first.next;
         size--;
         return element;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 清空队列
+    * @Date: 2020/12/21
+     * @param
+    * @Return: void
+    */
+    public void clear(){
+        first = null;
+        last = null;
+        size = 0;
     }
 }
