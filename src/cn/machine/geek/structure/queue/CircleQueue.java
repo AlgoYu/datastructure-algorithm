@@ -37,6 +37,17 @@ public class CircleQueue<E> {
     }
 
     /**
+    * @Author: MachineGeek
+    * @Description: 映射索引
+    * @Date: 2020/12/23
+     * @param index
+    * @Return: int
+    */
+    private int index(int index){
+        return (head + index) % elements.length;
+    }
+
+    /**
      * @Author: MachineGeek
      * @Description: 入队列
      * @Date: 2020/12/22
@@ -45,7 +56,7 @@ public class CircleQueue<E> {
      */
     public void enqueue(E element){
         resize(size + 1);
-        elements[( head+size ) % elements.length] = element;
+        elements[index(size)] = element;
         size++;
     }
 
@@ -60,7 +71,7 @@ public class CircleQueue<E> {
         if(capacity > elements.length){
             E[] temp = (E[]) new Object[elements.length + (elements.length >> 1)];
             for (int i = 0; i < size; i++){
-                temp[i] = elements[(i + head) % elements.length];
+                temp[i] = elements[index(i)];
             }
             elements = temp;
             head = 0;
@@ -91,7 +102,7 @@ public class CircleQueue<E> {
         }
         E element = elements[head];
         elements[head] = null;
-        head = (head + 1) % elements.length;
+        head = index(1);
         size--;
         return element;
     }
