@@ -59,15 +59,11 @@ public class CircleQueue<E> {
     private void resize(int capacity){
         if(capacity > elements.length){
             E[] temp = (E[]) new Object[elements.length + (elements.length >> 1)];
-            int i = 0;
-            int n = size;
-            while (i < n){
-                temp[i] = dequeue();
-                i++;
+            for (int i = 0; i < size; i++){
+                temp[i] = elements[(i + head) % elements.length];
             }
             elements = temp;
             head = 0;
-            size = n;
         }
     }
 

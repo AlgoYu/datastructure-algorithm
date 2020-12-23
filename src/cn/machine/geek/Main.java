@@ -38,6 +38,5 @@ public class Main {
         System.out.print(circleQueue.dequeue());
         System.out.print(circleQueue.dequeue());
         System.out.print(circleQueue.dequeue());
-        System.out.print(circleQueue.dequeue());
     }
 }
