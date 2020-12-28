@@ -5,6 +5,9 @@ import cn.machine.geek.structure.queue.CircleQueue;
 import cn.machine.geek.structure.queue.LinkedQueue;
 import cn.machine.geek.structure.stack.LinkedStack;
 import cn.machine.geek.structure.stack.Stack;
+import cn.machine.geek.structure.tree.BinarySearchTree;
+
+import java.util.Comparator;
 
 
 /**
@@ -15,21 +18,15 @@ import cn.machine.geek.structure.stack.Stack;
  */
 public class Main {
     public static void main(String[] args) {
-        CircleQueue<Integer> circleQueue = new CircleQueue<>();
-        circleQueue.enqueue(1);
-        circleQueue.enqueue(2);
-        circleQueue.enqueue(2);
-        circleQueue.enqueue(2);
-        circleQueue.enqueue(2);
-        circleQueue.enqueue(2);
-        circleQueue.enqueue(2);
-        circleQueue.enqueue(2);
-        circleQueue.enqueue(2);
-        circleQueue.enqueue(2);
-        circleQueue.enqueue(2);
-        System.out.print(circleQueue.dequeue());
-        System.out.print(circleQueue.dequeue());
-        System.out.print(circleQueue.dequeue());
-        circleQueue.clear();
+//        BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>();
+//        binarySearchTree.add(5);
+//        binarySearchTree.add(1);
+//        binarySearchTree.add(6);
+//        binarySearchTree.add(0);
+//        binarySearchTree.add(2);
+//        binarySearchTree.add(9);
+//        binarySearchTree.add(9);
+//        binarySearchTree.levelOrderTraverse(new BinarySearchTree.Visitor<Integer>() {
+//        });
     }
 }
