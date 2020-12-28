@@ -8,6 +8,7 @@ import cn.machine.geek.structure.stack.Stack;
 import cn.machine.geek.structure.tree.BinarySearchTree;
 
 import java.util.Comparator;
+import java.util.function.BinaryOperator;
 
 
 /**
@@ -18,15 +19,23 @@ import java.util.Comparator;
  */
 public class Main {
     public static void main(String[] args) {
-//        BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>();
-//        binarySearchTree.add(5);
-//        binarySearchTree.add(1);
-//        binarySearchTree.add(6);
-//        binarySearchTree.add(0);
-//        binarySearchTree.add(2);
-//        binarySearchTree.add(9);
-//        binarySearchTree.add(9);
-//        binarySearchTree.levelOrderTraverse(new BinarySearchTree.Visitor<Integer>() {
-//        });
+        BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>();
+        binarySearchTree.add(5);
+        binarySearchTree.add(1);
+        binarySearchTree.add(6);
+        binarySearchTree.add(0);
+        binarySearchTree.add(2);
+        binarySearchTree.add(9);
+        binarySearchTree.add(9);
+        binarySearchTree.levelOrderTraverse(new BinarySearchTree.Visitor<Integer>() {
+            @Override
+            protected boolean operate(Integer element) {
+                System.out.print(element);
+                if(element == 6){
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }

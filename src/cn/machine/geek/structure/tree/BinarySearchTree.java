@@ -34,7 +34,7 @@ public class BinarySearchTree<E> {
     * @Date: 2020/12/28
     * @Return:
     */
-    public abstract class Visitor<E>{
+    public static abstract class Visitor<E>{
         boolean stop;
         protected abstract boolean operate(E element);
     }
@@ -42,6 +42,13 @@ public class BinarySearchTree<E> {
     private int size;
     private Comparator<E> comparator;
 
+    /**
+    * @Author: MachineGeek
+    * @Description: 空构造函数
+    * @Date: 2020/12/28
+     * @param
+    * @Return:
+    */
     public BinarySearchTree() {
     }
 
