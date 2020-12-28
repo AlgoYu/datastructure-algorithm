@@ -100,6 +100,24 @@ public class BinarySearchTree<E> {
 
     /**
     * @Author: MachineGeek
+    * @Description: 获取树的高度
+    * @Date: 2020/12/28
+     * @param
+    * @Return: int
+    */
+    public int height(){
+        return height(root);
+    }
+
+    private int height(Node<E> node){
+        if(node == null){
+            return 0;
+        }
+        return Math.max(height(node.left),height(node.right)) + 1;
+    }
+
+    /**
+    * @Author: MachineGeek
     * @Description: 比较元素
     * @Date: 2020/12/28
      * @param element1

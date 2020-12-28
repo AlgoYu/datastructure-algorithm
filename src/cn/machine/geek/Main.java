@@ -26,16 +26,11 @@ public class Main {
         binarySearchTree.add(0);
         binarySearchTree.add(2);
         binarySearchTree.add(9);
-        binarySearchTree.add(9);
-        binarySearchTree.levelOrderTraverse(new BinarySearchTree.Visitor<Integer>() {
-            @Override
-            protected boolean operate(Integer element) {
-                System.out.print(element);
-                if(element == 6){
-                    return true;
-                }
-                return false;
-            }
-        });
+        binarySearchTree.add(8);
+        binarySearchTree.add(8);
+        binarySearchTree.add(16);
+        binarySearchTree.add(32);
+        binarySearchTree.add(72);
+        System.out.println(binarySearchTree.height());
     }
 }
