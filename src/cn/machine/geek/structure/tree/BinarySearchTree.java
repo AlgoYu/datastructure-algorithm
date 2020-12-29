@@ -80,13 +80,14 @@ public class BinarySearchTree<E> {
             while (temp != null) {
                 parent = temp;
                 value = compare(temp.element, element);
-                if (value > 0) {
-                    temp = temp.left;
-                } else if (value < 0) {
-                    temp = temp.right;
-                } else {
+                if(value == 0){
                     temp.element = element;
                     return;
+                }
+                if (value > 0) {
+                    temp = temp.left;
+                } else{
+                    temp = temp.right;
                 }
             }
             if (value > 0) {
@@ -141,6 +142,88 @@ public class BinarySearchTree<E> {
     public void clear(){
         root = null;
         size = 0;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 删除节点
+    * @Date: 2020/12/29
+     * @param element
+    * @Return: void
+    */
+    public void remove(E element){
+        Node<E> node = getNode(element);
+
+        size--;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 找到当前节点的中序遍历前驱节点
+    * @Date: 2020/12/29
+     * @param node
+    * @Return: cn.machine.geek.structure.tree.BinarySearchTree<E>.Node<E>
+    */
+    private Node<E> predecessorNode(Node<E> node){
+        if(node == null){
+            return null;
+        }
+        if(node.left != null){
+            while (node.right != null){
+                node = node.right;
+            }
+            return node;
+        }
+        while (node.parent != null && node.parent.left == node){
+            node = node.parent;
+        }
+        return node.parent;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 找到当前节点的中序遍历前驱节点
+    * @Date: 2020/12/29
+     * @param node
+    * @Return: cn.machine.geek.structure.tree.BinarySearchTree<E>.Node<E>
+    */
+    private Node<E> subsequentNode(Node<E> node){
+        if(node == null){
+            return null;
+        }
+        if(node.right != null){
+            while (node.left != null){
+                node = node.left;
+            }
+            return node;
+        }
+        while (node.parent != null && node.parent.right == node){
+            node = node.parent;
+        }
+        return node.parent;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 查找节点
+    * @Date: 2020/12/29
+     * @param element
+    * @Return: cn.machine.geek.structure.tree.BinarySearchTree<E>.Node<E>
+    */
+    public Node<E> getNode(E element){
+        Node<E> temp = root;
+        while (temp != null){
+            int value = compare(temp.element,element);
+            if(value == 0){
+                return temp;
+            }
+            if(value > 0){
+                temp = temp.left;
+            }else{
+                temp = temp.right;
+            }
+        }
+        return temp;
     }
 
     /**
@@ -210,6 +293,39 @@ public class BinarySearchTree<E> {
                 queue.add(node.right);
             }
         }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 判断是否是一颗完全二叉树
+    * @Date: 2020/12/29
+     * @param
+    * @Return: boolean
+    */
+    public boolean isCompletion(){
+        boolean is = true;
+        Queue<Node<E>> queue = new LinkedList<>();
+        queue.add(root);
+        boolean leaf = false;
+        while (!queue.isEmpty()){
+            Node<E> temp = queue.poll();
+            if(leaf && (temp.left !=null || temp.right !=null)){
+                return false;
+            }
+
+            if(temp.left != null){
+                queue.add(temp.left);
+            }else if(temp.right != null){
+                return false;
+            }
+
+            if(temp.right != null){
+                queue.add(temp.right);
+            }else{
+                leaf = true;
+            }
+        }
+        return is;
     }
 
     /**
