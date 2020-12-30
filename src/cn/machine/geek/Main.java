@@ -9,6 +9,7 @@ import cn.machine.geek.structure.tree.BinarySearchTree;
 import sun.jvm.hotspot.gc_implementation.parallelScavenge.PSYoungGen;
 
 import java.util.Comparator;
+import java.util.Random;
 import java.util.function.BinaryOperator;
 
 
@@ -20,6 +21,20 @@ import java.util.function.BinaryOperator;
  */
 public class Main {
     public static void main(String[] args) {
-
+        BinarySearchTree<Integer> binarySearchTree = new BinarySearchTree<>();
+        binarySearchTree.add(5);
+        binarySearchTree.add(6);
+        binarySearchTree.add(1);
+        binarySearchTree.add(2);
+        binarySearchTree.add(0);
+        binarySearchTree.add(7);
+        binarySearchTree.add(8);
+        binarySearchTree.remove(8);
+        binarySearchTree.remove(6);
+        binarySearchTree.remove(1);
+        binarySearchTree.remove(5);
+        binarySearchTree.remove(0);
+        binarySearchTree.remove(2);
+        binarySearchTree.remove(7);
     }
 }

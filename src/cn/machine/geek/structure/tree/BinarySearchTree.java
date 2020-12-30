@@ -153,7 +153,33 @@ public class BinarySearchTree<E> {
     */
     public void remove(E element){
         Node<E> node = getNode(element);
-
+        if(node == null){
+            return;
+        }
+        if(node.left != null && node.right != null){
+            Node<E> predecessor = predecessorNode(node);
+            node.element = predecessor.element;
+            node = predecessor;
+        }
+        Node<E> replace = node.left != null? node.left : node.right;
+        if(replace != null){
+            replace.parent = node.parent;
+            if(replace.parent == null) {
+                root = replace;
+            }else if(node.parent.left == node){
+                node.parent.left = replace;
+            }else{
+                node.parent.right = replace;
+            }
+        }else if(node.parent == null){
+            root = null;
+        }else{
+            if(node.parent.left == node){
+                node.parent.left = null;
+            }else{
+                node.parent.right = null;
+            }
+        }
         size--;
     }
 
@@ -169,6 +195,7 @@ public class BinarySearchTree<E> {
             return null;
         }
         if(node.left != null){
+            node = node.left;
             while (node.right != null){
                 node = node.right;
             }
@@ -192,6 +219,7 @@ public class BinarySearchTree<E> {
             return null;
         }
         if(node.right != null){
+            node = node.right;
             while (node.left != null){
                 node = node.left;
             }
@@ -382,4 +410,25 @@ public class BinarySearchTree<E> {
         visitor.stop = visitor.operate(node.element);
     }
 
+    /**
+    * @Author: MachineGeek
+    * @Description: 是否为空
+    * @Date: 2020/12/30
+     * @param
+    * @Return: boolean
+    */
+    public boolean isEmpty(){
+        return size == 0;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 包含元素
+    * @Date: 2020/12/30
+     * @param element
+    * @Return: boolean
+    */
+    public boolean contains(E element){
+        return getNode(element) != null;
+    }
 }
