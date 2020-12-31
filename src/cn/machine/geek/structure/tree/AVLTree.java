@@ -6,15 +6,15 @@ import java.util.Queue;
 
 /**
  * @Author: MachineGeek
- * @Description: 二叉搜索树
+ * @Description: AVL树/二叉平衡树
  * @Email: 794763733@qq.com
- * @Date: 2020/12/28
+ * @Date: 2020/12/31
  */
-public class BinarySearchTree<E> {
+public class AVLTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 节点
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
     * @Return:
     */
     public class Node<E>{
@@ -22,16 +22,18 @@ public class BinarySearchTree<E> {
         private Node<E> parent;
         private Node<E> left;
         private Node<E> right;
+        private int height;
 
         public Node(E element, Node<E> parent) {
             this.element = element;
             this.parent = parent;
+            height = 1;
         }
     }
     /**
     * @Author: MachineGeek
     * @Description: 遍历操作抽象类
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
     * @Return:
     */
     public static abstract class Visitor<E>{
@@ -45,28 +47,28 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 空构造函数
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param
     * @Return:
     */
-    public BinarySearchTree() {
+    public AVLTree() {
     }
 
     /**
     * @Author: MachineGeek
     * @Description: 自定义比较器的构造函数
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param comparator
     * @Return:
     */
-    public BinarySearchTree(Comparator<E> comparator) {
+    public AVLTree(Comparator<E> comparator) {
         this.comparator = comparator;
     }
 
     /**
     * @Author: MachineGeek
     * @Description: 增加节点
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param element
     * @Return: void
     */
@@ -90,11 +92,13 @@ public class BinarySearchTree<E> {
                     temp = temp.right;
                 }
             }
+            Node<E> node = new Node<>(element,parent);
             if (value > 0) {
-                parent.left = new Node<>(element, parent);
+                parent.left = node;
             } else {
-                parent.right = new Node<>(element, parent);
+                parent.right = node;
             }
+            balance(node);
         }
         size++;
     }
@@ -102,7 +106,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 获取树的高度
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param
     * @Return: int
     */
@@ -120,7 +124,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 比较元素
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param element1
      * @param element2
     * @Return: int
@@ -135,7 +139,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 清空二叉树
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param
     * @Return: void
     */
@@ -147,7 +151,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 删除节点
-    * @Date: 2020/12/29
+    * @Date: 2020/12/31
      * @param element
     * @Return: void
     */
@@ -180,13 +184,14 @@ public class BinarySearchTree<E> {
                 node.parent.right = null;
             }
         }
+        balance(node);
         size--;
     }
 
     /**
     * @Author: MachineGeek
     * @Description: 找到当前节点的中序遍历前驱节点
-    * @Date: 2020/12/29
+    * @Date: 2020/12/31
      * @param node
     * @Return: cn.machine.geek.structure.tree.BinarySearchTree<E>.Node<E>
     */
@@ -210,7 +215,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 找到当前节点的中序遍历后继节点
-    * @Date: 2020/12/29
+    * @Date: 2020/12/31
      * @param node
     * @Return: cn.machine.geek.structure.tree.BinarySearchTree<E>.Node<E>
     */
@@ -234,7 +239,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 查找节点
-    * @Date: 2020/12/29
+    * @Date: 2020/12/31
      * @param element
     * @Return: cn.machine.geek.structure.tree.BinarySearchTree<E>.Node<E>
     */
@@ -257,7 +262,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 前序遍历
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param
     * @Return: void
     */
@@ -271,7 +276,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 中序遍历
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param
     * @Return: void
     */
@@ -285,7 +290,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 后序遍历
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param
     * @Return: void
     */
@@ -299,7 +304,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 层序遍历
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param
     * @Return: void
     */
@@ -326,7 +331,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 判断是否是一颗完全二叉树
-    * @Date: 2020/12/29
+    * @Date: 2020/12/31
      * @param
     * @Return: boolean
     */
@@ -359,7 +364,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 前序
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param node
     * @Return: void
     */
@@ -375,7 +380,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 中序
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param node
     * @Return: void
     */
@@ -394,7 +399,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 后序
-    * @Date: 2020/12/28
+    * @Date: 2020/12/31
      * @param node
     * @Return: void
     */
@@ -413,7 +418,7 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 是否为空
-    * @Date: 2020/12/30
+    * @Date: 2020/12/31
      * @param
     * @Return: boolean
     */
@@ -424,11 +429,171 @@ public class BinarySearchTree<E> {
     /**
     * @Author: MachineGeek
     * @Description: 包含元素
-    * @Date: 2020/12/30
+    * @Date: 2020/12/31
      * @param element
     * @Return: boolean
     */
     public boolean contains(E element){
         return getNode(element) != null;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 获取节点的平衡因子
+    * @Date: 2020/12/31
+     * @param node
+    * @Return: int
+    */
+    private int balanceFactor(Node<E> node){
+        return (node.left!=null?node.left.height:0) - (node.right!=null?node.right.height:0);
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 判断节点是否平衡
+    * @Date: 2020/12/31
+     * @param node
+    * @Return: boolean
+    */
+    private boolean isBalance(Node<E> node){
+        return Math.abs(balanceFactor(node)) <= 1;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 更新高度
+    * @Date: 2020/12/31
+     * @param node
+    * @Return: int
+    */
+    private void updateHeight(Node<E> node){
+        node.height = Math.max(node.left!=null?node.left.height:0,node.right!=null?node.right.height:0) + 1;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 返回节点中更高的子节点
+    * @Date: 2020/12/31
+     * @param node
+    * @Return: cn.machine.geek.structure.tree.AVLTree<E>.Node<E>
+    */
+    private Node<E> higherChild(Node<E> node){
+        int leftHeight = node.left == null?0:node.left.height;
+        int rightHeight = node.right == null?0:node.right.height;
+        if(leftHeight > rightHeight){
+            return node.left;
+        }else{
+            return node.right;
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 平衡二叉树
+    * @Date: 2020/12/31
+     * @param node
+    * @Return: int
+    */
+    private void balance(Node<E> node){
+        while ((node = node.parent) != null){
+            if(isBalance(node)){
+                updateHeight(node);
+            }else{
+                Node<E> child = higherChild(node);
+                Node<E> grandchild = higherChild(child);
+                if(child == node.left){
+                    if(grandchild == child.right){
+                        leftRotate(child);
+                    }
+                    rightRotate(node);
+                }else{
+                    if(grandchild == child.left){
+                        rightRotate(child);
+                    }
+                    leftRotate(node);
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * @Author: MachineGeek
+     * @Description: 对节点进行左旋
+     * @Date: 2020/12/31
+     * @param node
+     * @Return: cn.machine.geek.structure.tree.AVLTree<E>.Node<E>
+     */
+    private void leftRotate(Node<E> node){
+        Node<E> right = node.right;
+        node.right = right.left;
+        right.left = node;
+        right.parent = node.parent;
+        node.parent = right;
+        if(node.right != null){
+            node.right.parent = node;
+        }
+        if(right.parent == null){
+            root = right;
+        }else if(right.parent.left == node){
+            right.parent.left = right;
+        }else{
+            right.parent.right = right;
+        }
+        updateHeight(node);
+        updateHeight(right);
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 对节点进行右旋
+    * @Date: 2020/12/31
+     * @param node
+    * @Return: cn.machine.geek.structure.tree.AVLTree<E>.Node<E>
+    */
+    private void rightRotate(Node<E> node){
+        Node<E> left = node.left;
+        node.left = left.right;
+        left.right = node;
+        left.parent = node.parent;
+        node.parent = left;
+        if(node.left != null){
+            node.left.parent = node;
+        }
+        if(left.parent == null){
+            root = left;
+        }else if(left.parent.left == node){
+            left.parent.left = left;
+        }else{
+            left.parent.right = left;
+        }
+        updateHeight(node);
+        updateHeight(left);
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 统一旋转，无视LL,RR,LR,RL。
+    * @Date: 2020/12/31
+     * @param root
+     * @param node
+     * @param child
+     * @param grandchild
+     * @param leftOfGrandchild
+     * @param rightOfGrandchild
+     * @param rightOfGrandchild
+     * @param anotherOfRoot
+    * @Return: void
+    */
+    private void unifyRotate(Node<E> root,Node<E> node,Node<E> child,Node<E> grandchild,Node<E> leftOfGrandchild,Node<E> rightOfGrandchild,Node<E> anotherOfChild
+            ,Node<E> anotherOfRoot){
+        child.parent = root.parent;
+        if(child.parent.left == null){
+            root = child;
+        }else if(child.parent.left == root){
+            child.parent.left = child;
+        }else{
+            child.parent.right = child;
+        }
     }
 }
