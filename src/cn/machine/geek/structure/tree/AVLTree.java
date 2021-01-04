@@ -576,24 +576,40 @@ public class AVLTree<E> {
     * @Description: 统一旋转，无视LL,RR,LR,RL。
     * @Date: 2020/12/31
      * @param root
-     * @param node
-     * @param child
-     * @param grandchild
-     * @param leftOfGrandchild
-     * @param rightOfGrandchild
-     * @param rightOfGrandchild
-     * @param anotherOfRoot
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @param e
+     * @param e
+     * @param g
     * @Return: void
     */
-    private void unifyRotate(Node<E> root,Node<E> node,Node<E> child,Node<E> grandchild,Node<E> leftOfGrandchild,Node<E> rightOfGrandchild,Node<E> anotherOfChild
-            ,Node<E> anotherOfRoot){
-        child.parent = root.parent;
-        if(child.parent.left == null){
-            root = child;
-        }else if(child.parent.left == root){
-            child.parent.left = child;
+    private void unifyRotate(Node<E> root,Node<E> a,Node<E> b,Node<E> c,Node<E> d,Node<E> e,Node<E> f
+            ,Node<E> g){
+        d.parent = root.parent;
+        if(d.parent == null){
+            root = d;
+        }else if(d.parent.left == root){
+            d.parent.left = d;
         }else{
-            child.parent.right = child;
+            d.parent.right = d;
         }
+
+        b.right = c;
+        if(c != null){
+            c.parent = b;
+        }
+        updateHeight(b);
+
+        f.left = e;
+        if(e != null){
+            e.parent = f;
+        }
+        updateHeight(f);
+
+        d.left = b;
+        d.right = f;
+        updateHeight(d);
     }
 }
