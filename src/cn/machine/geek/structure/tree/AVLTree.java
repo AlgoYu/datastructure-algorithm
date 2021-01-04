@@ -98,7 +98,7 @@ public class AVLTree<E> {
             } else {
                 parent.right = node;
             }
-            balance(node);
+            balance(node,false);
         }
         size++;
     }
@@ -184,7 +184,7 @@ public class AVLTree<E> {
                 node.parent.right = null;
             }
         }
-        balance(node);
+        balance(node,true);
         size--;
     }
 
@@ -494,7 +494,7 @@ public class AVLTree<E> {
      * @param node
     * @Return: int
     */
-    private void balance(Node<E> node){
+    private void balance(Node<E> node,boolean isBreak){
         while ((node = node.parent) != null){
             if(isBalance(node)){
                 updateHeight(node);
@@ -512,7 +512,9 @@ public class AVLTree<E> {
                     }
                     leftRotate(node);
                 }
-                break;
+                if(isBreak){
+                    break;
+                }
             }
         }
     }
