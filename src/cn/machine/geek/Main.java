@@ -7,6 +7,7 @@ import cn.machine.geek.structure.stack.LinkedStack;
 import cn.machine.geek.structure.stack.Stack;
 import cn.machine.geek.structure.tree.AVLTree;
 import cn.machine.geek.structure.tree.BinarySearchTree;
+import cn.machine.geek.structure.tree.RedBlackTree;
 import sun.jvm.hotspot.gc_implementation.parallelScavenge.PSYoungGen;
 
 import java.util.Comparator;
@@ -22,11 +23,16 @@ import java.util.function.BinaryOperator;
  */
 public class Main {
     public static void main(String[] args) {
-        AVLTree<Integer> avlTree = new AVLTree<>();
-        avlTree.add(5);
-        avlTree.add(6);
-        avlTree.add(0);
-        avlTree.add(10);
-        avlTree.remove(0);
+        RedBlackTree<Integer> redBlackTree = new RedBlackTree<>();
+        redBlackTree.add(7);
+        redBlackTree.add(1);
+        redBlackTree.add(28);
+        redBlackTree.add(10);
+        redBlackTree.add(4);
+        redBlackTree.add(2);
+        redBlackTree.add(9);
+        redBlackTree.add(6);
+        redBlackTree.add(22);
+        redBlackTree.add(31);
     }
 }
