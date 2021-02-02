@@ -72,10 +72,12 @@ public class RedBlackTree<E> {
     * @Return: void
     */
     public void add(E element){
+        // 根节点直接添加
         if(size == 0){
             root = new Node<>(element,null);
             afterAdd(root);
         }else {
+            // 向左右查找并记录parent节点
             Node<E> temp = root;
             Node<E> parent = null;
             int value = 0;
@@ -92,12 +94,14 @@ public class RedBlackTree<E> {
                     temp = temp.right;
                 }
             }
+            // 使用节点元素与新增元素的比较值value值来判断放左边还是右边
             Node<E> node = new Node<>(element,parent);
             if (value > 0) {
                 parent.left = node;
             } else {
                 parent.right = node;
             }
+            // 新增后的处理
             afterAdd(node);
         }
         size++;
@@ -105,40 +109,50 @@ public class RedBlackTree<E> {
 
     /**
     * @Author: MachineGeek
-    * @Description: 红黑树添加节点
+    * @Description: 红黑树添加节点后的处理
     * @Date: 2021/1/25
      * @param node
     * @Return: void
     */
     private void afterAdd(Node<E> node){
+        // 如果是根节点直接染黑返回
         Node<E> parent = node.parent;
         if(parent == null){
             node.red = false;
             return;
         }
+        // 如果父节点是黑色不用处理，如果是红色则需要处理。
         if(parent.red){
             Node<E> grandParent = parent.parent;
             Node<E> uncle = getBrother(parent);
-            if(uncle == null || !uncle.red){
+            // 如果叔父节点是黑色，需要进行旋转操作，并设置颜色。
+            if(isBlack(uncle)){
+                // L
                 if(parent == parent.parent.left){
+                    // LL
                     if(node == parent.left){
                         parent.red = false;
+                    // LR
                     }else{
                         leftRotate(parent);
                         node.red = false;
                     }
                     grandParent.red = true;
                     rightRotate(grandParent);
+                // R
                 }else{
+                    // RL
                     if(node == parent.left){
                         rightRotate(parent);
                         node.red = false;
+                    // RR
                     }else{
                         parent.red = false;
                     }
                     grandParent.red = true;
                     leftRotate(grandParent);
                 }
+            // 如果叔父节点是红色，需要向上递归染色。
             }else{
                 parent.red = false;
                 uncle.red = false;
@@ -219,15 +233,19 @@ public class RedBlackTree<E> {
     */
     public void remove(E element){
         Node<E> node = getNode(element);
+        // 节点为空直接返回
         if(node == null){
             return;
         }
+        // 如果节点左右子节点都不为空，寻找一个前驱节点赋值到自己，并让前驱结点删除。
         if(node.left != null && node.right != null){
             Node<E> predecessor = predecessorNode(node);
             node.element = predecessor.element;
             node = predecessor;
         }
+        // 寻找这个将要被删除的节点的子节点作为替代节点
         Node<E> replace = node.left != null? node.left : node.right;
+        // 有子节点的情况处理
         if(replace != null){
             replace.parent = node.parent;
             if(replace.parent == null) {
@@ -237,8 +255,10 @@ public class RedBlackTree<E> {
             }else{
                 node.parent.right = replace;
             }
+        // 根节点的情况处理
         }else if(node.parent == null){
             root = null;
+        // 无子节点的情况处理
         }else{
             if(node.parent.left == node){
                 node.parent.left = null;
@@ -246,7 +266,128 @@ public class RedBlackTree<E> {
                 node.parent.right = null;
             }
         }
+        // 删除后的情况处理
+        afterRemove(node,replace);
         size--;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 红黑树删除节点后的处理
+    * @Date: 2021/2/1
+     * @param node
+     * @param replace
+    * @Return: void
+    */
+    private void afterRemove(Node<E> node,Node<E> replace){
+        // 如果删除的是红色节点直接返回
+        if(node.red){
+            return;
+        }
+        // 如果存在替代的子节点且为红色，把替代的节点染黑直接返回
+        if(isRed(replace)){
+            replace.red = false;
+            return;
+        }
+        // 如果是根节点直接返回
+        Node<E> parent = node.parent;
+        if(parent == null){
+            return;
+        }
+        // 被删除的节点是黑色叶子节点，获取它的兄弟节点
+        boolean left = parent.left == null || node == parent.left;
+        Node<E> brother = left? parent.right : parent.left;
+        // 被删除的节点在左边，兄弟节点在右边
+        if(left){
+            // 如果右边的兄弟节点为红色，则对父节点左旋，重新赋值兄弟节点。
+            if(brother.red){
+                brother.red = false;
+                parent.red = true;
+                leftRotate(parent);
+                brother = parent.right;
+            }
+            // 如果兄弟节点的左右节点都是黑色，则没有可借节点，父节点染黑，兄弟节点染红。
+            if(isBlack(brother.left) && isBlack(brother.right)){
+                boolean red = parent.red;
+                brother.red = true;
+                parent.red = false;
+                // 如果父节点是黑色，则会下溢，需要重新处理
+                if(!red){
+                    afterRemove(parent,null);
+                }
+            // 兄弟节点至少有一个红色子节点
+            }else{
+                // 如果兄弟的右子节点是黑色，兄弟先进行一次右旋
+                if(isBlack(brother.right)){
+                    rightRotate(brother);
+                    brother = parent.right;
+                }
+                // 染色
+                brother.red = parent.red;
+                if(brother.right != null){
+                    brother.right.red = false;
+                }
+                parent.red = false;
+                // 对父节点进行左旋转
+                leftRotate(parent);
+            }
+        // 被删除的节点在右边，兄弟节点在左边
+        }else{
+            // 如果左边的兄弟节点为红色，则对父节点右旋，重新赋值兄弟节点。
+            if(brother.red){
+                brother.red = false;
+                parent.red = true;
+                rightRotate(parent);
+                brother = parent.left;
+            }
+            // 如果兄弟节点的左右节点都是黑色，则没有可借节点，父节点染黑，兄弟节点染红。
+            if(isBlack(brother.left) && isBlack(brother.right)){
+                boolean red = parent.red;
+                brother.red = true;
+                parent.red = false;
+                // 如果父节点是黑色，则会下溢，需要重新处理
+                if(!red){
+                    afterRemove(parent,null);
+                }
+            // 兄弟节点至少有一个红色子节点
+            }else{
+                // 如果兄弟的左子节点是黑色，兄弟先进行一次左旋
+                if(isBlack(brother.left)){
+                    leftRotate(brother);
+                    brother = parent.left;
+                }
+                // 染色
+                brother.red = parent.red;
+                if(brother.left != null){
+                    brother.left.red = false;
+                }
+                parent.red = false;
+                // 对父节点进行右旋转
+                rightRotate(parent);
+            }
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 判断节点是否为黑色
+    * @Date: 2021/2/2
+     * @param node
+    * @Return: boolean
+    */
+    private boolean isBlack(Node<E> node){
+        return node == null || !node.red;
+    }
+
+    /**
+     * @Author: MachineGeek
+     * @Description: 判断节点是否为红色
+     * @Date: 2021/2/2
+     * @param node
+     * @Return: boolean
+     */
+    private boolean isRed(Node<E> node){
+        return node != null || node.red;
     }
 
     /**
