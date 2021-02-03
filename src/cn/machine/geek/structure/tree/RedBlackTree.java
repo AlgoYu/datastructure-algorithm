@@ -255,9 +255,11 @@ public class RedBlackTree<E> {
             }else{
                 node.parent.right = replace;
             }
+            afterRemove(replace);
         // 根节点的情况处理
         }else if(node.parent == null){
             root = null;
+            afterRemove(node);
         // 无子节点的情况处理
         }else{
             if(node.parent.left == node){
@@ -265,9 +267,9 @@ public class RedBlackTree<E> {
             }else{
                 node.parent.right = null;
             }
+            afterRemove(node);
         }
         // 删除后的情况处理
-        afterRemove(node,replace);
         size--;
     }
 
@@ -276,17 +278,12 @@ public class RedBlackTree<E> {
     * @Description: 红黑树删除节点后的处理
     * @Date: 2021/2/1
      * @param node
-     * @param replace
     * @Return: void
     */
-    private void afterRemove(Node<E> node,Node<E> replace){
-        // 如果删除的是红色节点直接返回
-        if(node.red){
-            return;
-        }
-        // 如果存在替代的子节点且为红色，把替代的节点染黑直接返回
-        if(isRed(replace)){
-            replace.red = false;
+    private void afterRemove(Node<E> node){
+        // 如果删除的节点（或者替代节点）是红色，染黑后直接返回。
+        if(isRed(node)){
+            node.red = false;
             return;
         }
         // 如果是根节点直接返回
@@ -313,7 +310,7 @@ public class RedBlackTree<E> {
                 parent.red = false;
                 // 如果父节点是黑色，则会下溢，需要重新处理
                 if(!red){
-                    afterRemove(parent,null);
+                    afterRemove(parent);
                 }
             // 兄弟节点至少有一个红色子节点
             }else{
@@ -347,7 +344,7 @@ public class RedBlackTree<E> {
                 parent.red = false;
                 // 如果父节点是黑色，则会下溢，需要重新处理
                 if(!red){
-                    afterRemove(parent,null);
+                    afterRemove(parent);
                 }
             // 兄弟节点至少有一个红色子节点
             }else{
