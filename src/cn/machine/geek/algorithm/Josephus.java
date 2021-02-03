@@ -2,7 +2,7 @@ package cn.machine.geek.algorithm;
 
 /**
  * @Author: MachineGeek
- * @Description: 约瑟夫问题
+ * @Description: 约瑟夫问题（基于单向循环链表）
  * @Email: 794763733@qq.com
  * @Date: 2020/12/17
  */

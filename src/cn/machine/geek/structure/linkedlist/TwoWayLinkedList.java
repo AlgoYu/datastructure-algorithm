@@ -206,4 +206,17 @@ public class TwoWayLinkedList<E> {
         }
         return -1;
     }
+
+    /**
+     * @Author: MachineGeek
+     * @Description: 清空链表
+     * @Date: 2021/2/3
+     * @param
+     * @Return: void
+     */
+    public void clear(){
+        first = null;
+        last = null;
+        size = 0;
+    }
 }
