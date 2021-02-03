@@ -34,5 +34,15 @@ public class Main {
         redBlackTree.add(6);
         redBlackTree.add(22);
         redBlackTree.add(31);
+        redBlackTree.remove(4);
+        redBlackTree.remove(22);
+        redBlackTree.remove(10);
+        redBlackTree.remove(2);
+        redBlackTree.remove(7);
+        redBlackTree.remove(1);
+        redBlackTree.remove(28);
+        redBlackTree.remove(6);
+        redBlackTree.remove(31);
+        redBlackTree.remove(9);
     }
 }

@@ -384,7 +384,7 @@ public class RedBlackTree<E> {
      * @Return: boolean
      */
     private boolean isRed(Node<E> node){
-        return node != null || node.red;
+        return node != null && node.red;
     }
 
     /**
