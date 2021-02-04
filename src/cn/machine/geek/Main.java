@@ -4,6 +4,7 @@ import cn.machine.geek.algorithm.Josephus;
 import cn.machine.geek.structure.queue.CircleQueue;
 import cn.machine.geek.structure.queue.LinkedQueue;
 import cn.machine.geek.structure.set.LinkedSet;
+import cn.machine.geek.structure.set.TreeSet;
 import cn.machine.geek.structure.stack.LinkedStack;
 import cn.machine.geek.structure.stack.Stack;
 import cn.machine.geek.structure.tree.AVLTree;
@@ -24,7 +25,7 @@ import java.util.function.BinaryOperator;
  */
 public class Main {
     public static void main(String[] args) {
-        LinkedSet<Integer> linkedSet = new LinkedSet<>();
+        TreeSet<Integer> linkedSet = new TreeSet<>();
         linkedSet.remove(1);
         linkedSet.add(2);
         linkedSet.add(3);
@@ -37,7 +38,7 @@ public class Main {
         linkedSet.add(5);
         linkedSet.add(5);
         linkedSet.add(6);
-        linkedSet.traversal(new LinkedSet.Visitor<Integer>() {
+        linkedSet.traversal(new TreeSet.Visitor<Integer>() {
             @Override
             protected boolean operate(Integer element) {
                 if(element == 5){
