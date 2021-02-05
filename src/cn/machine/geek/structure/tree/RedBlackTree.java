@@ -11,6 +11,10 @@ import java.util.Queue;
  * @Date: 2021/1/5
  */
 public class RedBlackTree<E> {
+    private Node<E> root;
+    private int size;
+    private Comparator<E> comparator;
+
     /**
     * @Author: MachineGeek
     * @Description: 节点
@@ -39,9 +43,6 @@ public class RedBlackTree<E> {
         boolean stop;
         protected abstract boolean operate(E element);
     }
-    private Node<E> root;
-    private int size;
-    private Comparator<E> comparator;
 
     /**
     * @Author: MachineGeek

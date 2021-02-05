@@ -383,12 +383,12 @@ public class BinarySearchTree<E> {
         if(null == node || visitor.stop){
             return;
         }
-        preorder(node.left,visitor);
+        inorder(node.left,visitor);
         if(visitor.stop){
             return;
         }
         visitor.stop = visitor.operate(node.element);
-        preorder(node.right,visitor);
+        inorder(node.right,visitor);
     }
 
     /**
@@ -402,8 +402,8 @@ public class BinarySearchTree<E> {
         if(null == node || visitor.stop){
             return;
         }
-        preorder(node.left,visitor);
-        preorder(node.right,visitor);
+        postorder(node.left,visitor);
+        postorder(node.right,visitor);
         if(visitor.stop){
             return;
         }
