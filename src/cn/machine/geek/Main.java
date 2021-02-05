@@ -1,20 +1,6 @@
 package cn.machine.geek;
 
-import cn.machine.geek.algorithm.Josephus;
-import cn.machine.geek.structure.queue.CircleQueue;
-import cn.machine.geek.structure.queue.LinkedQueue;
-import cn.machine.geek.structure.set.LinkedSet;
-import cn.machine.geek.structure.set.TreeSet;
-import cn.machine.geek.structure.stack.LinkedStack;
-import cn.machine.geek.structure.stack.Stack;
-import cn.machine.geek.structure.tree.AVLTree;
-import cn.machine.geek.structure.tree.BinarySearchTree;
-import cn.machine.geek.structure.tree.RedBlackTree;
-import sun.jvm.hotspot.gc_implementation.parallelScavenge.PSYoungGen;
-
-import java.util.Comparator;
-import java.util.Random;
-import java.util.function.BinaryOperator;
+import cn.machine.geek.structure.map.TreeMap;
 
 
 /**
@@ -25,28 +11,20 @@ import java.util.function.BinaryOperator;
  */
 public class Main {
     public static void main(String[] args) {
-        TreeSet<Integer> linkedSet = new TreeSet<>();
-        linkedSet.remove(1);
-        linkedSet.add(2);
-        linkedSet.add(3);
-        linkedSet.add(3);
-        linkedSet.add(2);
-        System.out.println(linkedSet.contains(5));
-        System.out.println(linkedSet.contains(2));
-        linkedSet.remove(2);
-        linkedSet.remove(3);
-        linkedSet.add(5);
-        linkedSet.add(5);
-        linkedSet.add(6);
-        linkedSet.traversal(new TreeSet.Visitor<Integer>() {
-            @Override
-            protected boolean operate(Integer element) {
-                if(element == 5){
-                    System.out.println("遍历到"+element);
-                    return true;
-                }
-                return false;
-            }
-        });
+        TreeMap<String,Integer> treeMap = new TreeMap<>();
+        treeMap.put("haha",123);
+        treeMap.put("2",23);
+        treeMap.put("123",42);
+        treeMap.put("222",21);
+        System.out.println(treeMap.put("222",33));
+        System.out.println(treeMap.put("222",null));
+        System.out.println(treeMap.get("haha"));
+        System.out.println(treeMap.get("asdasd"));
+        System.out.println(treeMap.containsKey("@13123"));
+        System.out.println(treeMap.containsKey("2"));
+        System.out.println(treeMap.containsValue(3212));
+        System.out.println(treeMap.containsValue(42));
+        System.out.println(treeMap.containsValue(null));
+        System.out.println(treeMap.containsValue(null));
     }
 }

@@ -49,6 +49,32 @@ public class TreeMap<K,V> {
 
     /**
     * @Author: MachineGeek
+    * @Description: 检查KEY
+    * @Date: 2021/2/5
+     * @param key
+    * @Return: void
+    */
+    private void checkKey(K key){
+        if(key == null){
+            throw new RuntimeException("Key must not be null");
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 获取值
+    * @Date: 2021/2/5
+     * @param key
+    * @Return: V
+    */
+    public V get(K key){
+        checkKey(key);
+        Node<K, V> node = getNode(key);
+        return node != null? node.value : null;
+    }
+
+    /**
+    * @Author: MachineGeek
     * @Description: 增加节点
     * @Date: 2021/2/5
      * @param key
@@ -160,7 +186,7 @@ public class TreeMap<K,V> {
     * @Return: void
     */
     public V remove(K key){
-        Node<K,V> node = get(key);
+        Node<K,V> node = getNode(key);
         // 节点为空直接返回
         if(node == null){
             return null;
@@ -338,7 +364,7 @@ public class TreeMap<K,V> {
     * @Return: boolean
     */
     public boolean containsKey(K key){
-        return get(key) != null;
+        return getNode(key) != null;
     }
 
     /**
@@ -438,7 +464,7 @@ public class TreeMap<K,V> {
      * @param key
      * @Return: cn.machine.geek.structure.tree.BinarySearchTree<E>.Node<E>
      */
-    public Node<K,V> get(K key){
+    public Node<K,V> getNode(K key){
         Node<K,V> temp = root;
         while (temp != null){
             int value = compare(temp.key,key);
