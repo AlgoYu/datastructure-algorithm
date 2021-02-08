@@ -1,6 +1,8 @@
 package cn.machine.geek.structure.map;
 
+import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Queue;
 
 /**
  * @Author: MachineGeek
@@ -331,18 +333,70 @@ public class HashMap<K,V> {
         }
     }
 
+    /**
+    * @Author: MachineGeek
+    * @Description: 是否包含节点
+    * @Date: 2021/2/8
+     * @param key
+    * @Return: boolean
+    */
     public boolean containsKey(K key){
-        return false;
+        return getNode(key) != null;
     }
 
     public boolean containsValue(V value){
+        if(size == 0){
+            return false;
+        }
+        for (int i = 0; i < table.length; i++){
+            Node<K,V> root = table[i];
+            if(root == null){
+                continue;
+            }
+            Queue<Node<K,V>> queue = new LinkedList<>();
+            queue.offer(root);
+            while (!queue.isEmpty()){
+                Node<K, V> node = queue.poll();
+                if(valEquals(node.value,value)){
+                    return true;
+                }
+                if(node.left != null){
+                    queue.offer(node.left);
+                }
+                if(node.right != null){
+                    queue.offer(node.right);
+                }
+            }
+        }
         return false;
     }
 
-    public boolean traversal(TreeMap.Visitor<K,V> visitor){
-        return false;
+    /**
+    * @Author: MachineGeek
+    * @Description: 遍历HashMap
+    * @Date: 2021/2/8
+     * @param visitor
+    * @Return: void
+    */
+    public void traversal(Visitor<K,V> visitor){
+        if(size == 0){
+            return;
+        }
+        for (int i = 0; i < table.length; i++){
+            inorder(table[i],visitor);
+            if(visitor.stop){
+                return;
+            }
+        }
     }
 
+    /**
+    * @Author: MachineGeek
+    * @Description: 根据HashCode获取索引
+    * @Date: 2021/2/8
+     * @param key
+    * @Return: int
+    */
     private int index(K key){
         if(key == null){
             return 0;

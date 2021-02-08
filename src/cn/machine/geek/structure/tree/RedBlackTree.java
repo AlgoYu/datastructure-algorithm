@@ -232,12 +232,13 @@ public class RedBlackTree<E> {
      * @param element
     * @Return: void
     */
-    public void remove(E element){
+    public E remove(E element){
         Node<E> node = getNode(element);
         // 节点为空直接返回
         if(node == null){
-            return;
+            return null;
         }
+        E old = node.element;
         // 如果节点左右子节点都不为空，寻找一个前驱节点赋值到自己，并让前驱结点删除。
         if(node.left != null && node.right != null){
             Node<E> predecessor = predecessorNode(node);
@@ -272,6 +273,7 @@ public class RedBlackTree<E> {
         }
         // 删除后的情况处理
         size--;
+        return element;
     }
 
     /**
