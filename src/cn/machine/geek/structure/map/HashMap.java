@@ -97,28 +97,41 @@ public class HashMap<K,V> {
             // 向左右查找并记录parent节点
             Node<K,V> temp = root;
             Node<K,V> parent = null;
+            Node<K,V> result;
             int flag = 0;
             int hashCode = key.hashCode();
             while (temp != null) {
                 parent = temp;
-                flag = compare(temp.key, key,temp.hashCode,hashCode);
-                if(flag == 0){
+                if(temp.hashCode > hashCode){
+                    flag = 1;
+                }else if(temp.hashCode < hashCode){
+                    flag = -1;
+                }else if(Objects.equals(temp.key,key)){
+                    flag = 0;
+                }else if(key != null && temp.key != null && key.getClass() == temp.key.getClass() && key instanceof Comparable){
+                    flag = ((Comparable)temp.key).compareTo(key);
+                }else if((temp.left != null && (result = getNode(temp.left,key)) != null) || (temp.right != null && (result = getNode(temp.right,key)) != null)){
+                    temp = result;
+                    flag = 0;
+                }else{
+                    flag = System.identityHashCode(temp.key) - System.identityHashCode(key);
+                }
+                if(flag > 0){
+                    temp = temp.left;
+                }else if(flag < 0){
+                    temp = temp.right;
+                }else{
                     V old = temp.value;
                     temp.key = key;
                     temp.value = value;
                     return old;
-                }
-                if (flag > 0) {
-                    temp = temp.left;
-                } else{
-                    temp = temp.right;
                 }
             }
             // 使用节点元素与新增元素的比较值value值来判断放左边还是右边
             Node<K,V> node = new Node<>(key,value,parent);
             if (flag > 0) {
                 parent.left = node;
-            } else {
+            } if(flag < 0){
                 parent.right = node;
             }
             // 新增后的处理
@@ -191,12 +204,12 @@ public class HashMap<K,V> {
     * @Return: V
     */
     public V get(K key){
-        Node<K, V> node = getNode(key);
+        Node<K, V> node = getNode(table[index(key)],key);
         return node == null? null : node.value;
     }
 
     public V remove(K key){
-        Node<K, V> node = getNode(key);
+        Node<K, V> node = getNode(table[index(key)],key);
         // 节点为空直接返回
         if(node == null){
             return null;
@@ -342,7 +355,7 @@ public class HashMap<K,V> {
     * @Return: boolean
     */
     public boolean containsKey(K key){
-        return getNode(key) != null;
+        return getNode(table[index(key)],key) != null;
     }
 
     public boolean containsValue(V value){
@@ -404,42 +417,6 @@ public class HashMap<K,V> {
         }
         int hashCode = key.hashCode();
         return (hashCode ^ (hashCode >>> 16)) & (table.length - 1);
-    }
-
-    /**
-     * @Author: MachineGeek
-     * @Description: 比较元素
-     * @Date: 2021/1/5
-     * @param key1
-     * @param key2
-     * @Return: int
-     */
-    private int compare(K key1,K key2,int hashCode1,int hashCode2){
-        // 比较HashCode
-        int result = hashCode1 - hashCode2;
-        if(result != 0){
-            return result;
-        }
-        // HashCode相同 比较Equals
-        if(Objects.equals(key1,key2)){
-            return 0;
-        }
-        // 两个Key不为空
-        if(key1 != null && key2 != null){
-            String key1ClassName = key1.getClass().getName();
-            String key2ClassName = key2.getClass().getName();
-            // 比较类名
-            result = key1ClassName.compareTo(key2ClassName);
-            if(result != 0){
-                return result;
-            }
-            // 如果是实现了比较器接口的类直接比较
-            if(key1 instanceof  Comparable){
-                return ((Comparable)key1).compareTo(key2);
-            }
-        }
-        // 比较内存
-        return System.identityHashCode(key1) - System.identityHashCode(key2);
     }
 
     /**
@@ -511,18 +488,29 @@ public class HashMap<K,V> {
      * @param key
      * @Return: cn.machine.geek.structure.tree.BinarySearchTree<E>.Node<E>
      */
-    public Node<K,V> getNode(K key){
-        Node<K,V> temp = table[index(key)];
+    public Node<K,V> getNode(Node<K,V> temp,K key){
         int hashCode = key == null? 0 : key.hashCode();
+        Node<K,V> result;
         while (temp != null){
-            int value = compare(temp.key,key,temp.hashCode,hashCode);
-            if(value == 0){
-                return temp;
-            }
-            if(value > 0){
+            if(temp.hashCode > hashCode){
                 temp = temp.left;
-            }else{
+            }else if(temp.hashCode < hashCode){
                 temp = temp.right;
+            }else if(Objects.equals(temp.key,key)){
+                return temp;
+            }else if(key != null && temp.key != null && key.getClass() == temp.key.getClass() && key instanceof Comparable){
+                int cmp = ((Comparable)temp.key).compareTo(key);
+                if(cmp > 0){
+                    temp = temp.left;
+                }else if(cmp < 0){
+                    temp = temp.right;
+                }else{
+                    return temp;
+                }
+            }else if((temp.left != null && (result = getNode(temp.left,key)) != null) || (temp.right != null && (result = getNode(temp.right,key)) != null)){
+                return result;
+            }else{
+                return null;
             }
         }
         return temp;
