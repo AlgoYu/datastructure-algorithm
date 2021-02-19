@@ -207,6 +207,7 @@ public class HashMap<K,V> {
             Node<K,V> predecessor = predecessorNode(node);
             node.key = predecessor.key;
             node.value = predecessor.value;
+            node.hashCode = predecessor.hashCode;
             node = predecessor;
         }
         // 寻找这个将要被删除的节点的子节点作为替代节点
