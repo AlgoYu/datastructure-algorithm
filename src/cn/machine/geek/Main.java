@@ -16,6 +16,9 @@ public class Main {
         for (int i = 0; i < 70000; i++){
             map.put(i,i * 10);
         }
+        for (int i = 0; i < 70000; i++){
+            map.remove(i);
+        }
         System.out.println(System.currentTimeMillis() - start);
         System.out.println(map.size());
 
