@@ -19,5 +19,10 @@ public class Main {
         binaryHeap.add(78);
         binaryHeap.add(64);
         System.out.println(binaryHeap.get());
+        System.out.println(binaryHeap.remove());
+        System.out.println(binaryHeap.remove());
+        System.out.println(binaryHeap.remove());
+        System.out.println(binaryHeap.remove());
+        System.out.println(binaryHeap.remove());
     }
 }

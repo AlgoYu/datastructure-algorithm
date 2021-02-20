@@ -1,5 +1,6 @@
 package cn.machine.geek.structure.heap;
 
+import java.time.Year;
 import java.util.Comparator;
 
 /**
@@ -82,7 +83,13 @@ public class BinaryHeap<E> {
     }
 
     public E remove(){
-        return null;
+        checkRange();
+        E temp = elements[0];
+        elements[0] = elements[size - 1];
+        elements[size - 1] = null;
+        size--;
+        siftDown(0);
+        return temp;
     }
 
     /**
@@ -94,14 +101,49 @@ public class BinaryHeap<E> {
     */
     private void siftUp(int index){
         E temp = elements[index];
+        // 如果index大于0则代表有父节点
         while (index > 0){
+            // 找到父节点，如果父节点比当前节点大，则退出循环。
             int parentIndex = (index - 1) >> 1;
             if(compare(temp,elements[parentIndex]) <= 0){
                 break;
             }
+            // 让父节点覆盖当前节点
             elements[index] = elements[parentIndex];
+            // 去父节点的索引再次循环
             index = parentIndex;
         }
+        elements[index] = temp;
+    }
+
+    /**
+     * @Author: MachineGeek
+     * @Description: 让index位置的元素下滤
+     * @Date: 2021/2/20
+     * @param index
+     * @Return: void
+     */
+    private void siftDown(int index){
+        E temp = elements[index];
+        // 如果index小于floor(size/2)，则说明存在子节点。
+        int half = size >> 1;
+        while (index < half){
+            // 左子节点
+            int childIndex = (index << 1) + 1;
+            // 如果右子节点存在，并且比左子节点大，则取右子节点。
+            if(childIndex + 1 < size && compare(elements[childIndex],elements[childIndex + 1]) < 0){
+                childIndex = childIndex+1;
+            }
+            // 如果index大于子节点则退出循环
+            if(compare(temp,elements[childIndex]) >= 0){
+                break;
+            }
+            // 叶子节点覆盖当前节点
+            elements[index] = elements[childIndex];
+            // 进入右子节点循环
+            index = childIndex;
+        }
+        // 找到最后的索引放入值
         elements[index] = temp;
     }
 
