@@ -194,7 +194,7 @@ public class HashMap<K,V> {
                     grandParent.red = true;
                     leftRotate(grandParent);
                 }
-                // 如果叔父节点是红色，需要向上递归染色。
+            // 如果叔父节点是红色，需要向上递归染色。
             }else{
                 parent.red = false;
                 uncle.red = false;
@@ -242,11 +242,16 @@ public class HashMap<K,V> {
     * @Return: void
     */
     private void moveNode(Node<K,V> node){
+        // 重置红黑树节点
         node.parent = null;
         node.left = null;
         node.right = null;
+        node.red = true;
+        // 获取新的索引
         int index = index(node.key);
+        // 获取索引上的根节点
         Node<K, V> root = table[index];
+        // 根节点为Null
         if(root == null){
             root = node;
             afterPut(root);
@@ -255,8 +260,8 @@ public class HashMap<K,V> {
             // 向左右查找并记录parent节点
             Node<K,V> temp = root;
             Node<K,V> parent = null;
-            Node<K,V> result;
             int flag = 0;
+            // 注意这里是移动节点，所以绝对不会存在相等节点的情况。
             while (temp != null) {
                 parent = temp;
                 if(temp.hashCode > node.hashCode){
@@ -277,9 +282,10 @@ public class HashMap<K,V> {
             // 使用节点元素与新增元素的比较值value值来判断放左边还是右边
             if (flag > 0) {
                 parent.left = node;
-            }else if(flag < 0){
+            }else{
                 parent.right = node;
             }
+            // 连线
             node.parent = parent;
             // 新增后的处理
             afterPut(node);
