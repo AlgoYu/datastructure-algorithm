@@ -109,8 +109,8 @@ public class HashMap<K,V> {
                     flag = -1;
                 }else if(Objects.equals(temp.key,key)){
                     flag = 0;
-                }else if(key != null && temp.key != null && key.getClass() == temp.key.getClass() && key instanceof Comparable){
-                    flag = ((Comparable)temp.key).compareTo(key);
+                }else if(key != null && temp.key != null && key.getClass() == temp.key.getClass() && key instanceof Comparable && (flag = ((Comparable)temp.key).compareTo(key)) != 0){
+
                 }else if(searched){
                     flag = System.identityHashCode(temp.key) - System.identityHashCode(key);
                 }else{
@@ -497,6 +497,7 @@ public class HashMap<K,V> {
     public Node<K,V> getNode(Node<K,V> temp,K key){
         int hashCode = key == null? 0 : key.hashCode();
         Node<K,V> result;
+        int cmp = 0;
         while (temp != null){
             if(temp.hashCode > hashCode){
                 temp = temp.left;
@@ -504,14 +505,11 @@ public class HashMap<K,V> {
                 temp = temp.right;
             }else if(Objects.equals(temp.key,key)){
                 return temp;
-            }else if(key != null && temp.key != null && key.getClass() == temp.key.getClass() && key instanceof Comparable){
-                int cmp = ((Comparable)temp.key).compareTo(key);
+            }else if(key != null && temp.key != null && key.getClass() == temp.key.getClass() && key instanceof Comparable && (cmp = ((Comparable)temp.key).compareTo(key)) != 0){
                 if(cmp > 0){
                     temp = temp.left;
-                }else if(cmp < 0){
-                    temp = temp.right;
                 }else{
-                    return temp;
+                    temp = temp.right;
                 }
             }else if((temp.left != null && (result = getNode(temp.left,key)) != null) || (temp.right != null && (result = getNode(temp.right,key)) != null)){
                 return result;
