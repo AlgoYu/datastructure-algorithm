@@ -100,6 +100,7 @@ public class HashMap<K,V> {
             Node<K,V> result;
             int flag = 0;
             int hashCode = key.hashCode();
+            boolean searched = false;
             while (temp != null) {
                 parent = temp;
                 if(temp.hashCode > hashCode){
@@ -110,11 +111,16 @@ public class HashMap<K,V> {
                     flag = 0;
                 }else if(key != null && temp.key != null && key.getClass() == temp.key.getClass() && key instanceof Comparable){
                     flag = ((Comparable)temp.key).compareTo(key);
-                }else if((temp.left != null && (result = getNode(temp.left,key)) != null) || (temp.right != null && (result = getNode(temp.right,key)) != null)){
-                    temp = result;
-                    flag = 0;
-                }else{
+                }else if(searched){
                     flag = System.identityHashCode(temp.key) - System.identityHashCode(key);
+                }else{
+                    if((temp.left != null && (result = getNode(temp.left,key)) != null) || (temp.right != null && (result = getNode(temp.right,key)) != null)){
+                        temp = result;
+                        flag = 0;
+                    }else{
+                        searched = true;
+                        flag = System.identityHashCode(temp.key) - System.identityHashCode(key);
+                    }
                 }
                 if(flag > 0){
                     temp = temp.left;
