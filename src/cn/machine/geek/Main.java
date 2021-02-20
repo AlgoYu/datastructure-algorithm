@@ -1,6 +1,6 @@
 package cn.machine.geek;
 
-import cn.machine.geek.structure.map.HashMap;
+import cn.machine.geek.structure.heap.BinaryHeap;
 
 
 /**
@@ -11,17 +11,13 @@ import cn.machine.geek.structure.map.HashMap;
  */
 public class Main {
     public static void main(String[] args) {
-        HashMap<Object,Integer> map = new HashMap<>();
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 70000; i++){
-            map.put(i,i * 10);
-        }
-        for (int i = 0; i < 70000; i++){
-            map.remove(i);
-        }
-        System.out.println(System.currentTimeMillis() - start);
-        System.out.println(map.size());
-
-        System.out.println(map.get(2));
+        BinaryHeap<Integer> binaryHeap = new BinaryHeap<>();
+        binaryHeap.add(5);
+        binaryHeap.add(7);
+        binaryHeap.add(10);
+        binaryHeap.add(2);
+        binaryHeap.add(78);
+        binaryHeap.add(64);
+        System.out.println(binaryHeap.get());
     }
 }
