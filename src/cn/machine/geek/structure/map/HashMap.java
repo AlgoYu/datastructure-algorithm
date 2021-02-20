@@ -6,7 +6,7 @@ import java.util.Queue;
 
 /**
  * @Author: MachineGeek
- * @Description: 哈希表(红黑树+链表版本)
+ * @Description: 哈希表(红黑树版本)
  * @Email: 794763733@qq.com
  * @Date: 2021/2/8
  */
@@ -14,6 +14,7 @@ public class HashMap<K,V> {
     private int size;
     private Node<K,V>[] table;
     private static final int DEFAULT_SIZE = 1 << 4;
+    private static final float DEFAULT_LOAD_FACTOR = 0.75F;
 
     /**
      * @Author: MachineGeek
@@ -87,6 +88,7 @@ public class HashMap<K,V> {
     * @Return: V
     */
     public V put(K key, V value){
+        resize();
         int index = index(key);
         Node<K, V> root = table[index];
         if(root == null){
@@ -137,7 +139,7 @@ public class HashMap<K,V> {
             Node<K,V> node = new Node<>(key,value,parent);
             if (flag > 0) {
                 parent.left = node;
-            } if(flag < 0){
+            }else{
                 parent.right = node;
             }
             // 新增后的处理
@@ -199,6 +201,88 @@ public class HashMap<K,V> {
                 grandParent.red = true;
                 afterPut(grandParent);
             }
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 扩容
+    * @Date: 2021/2/20
+     * @param
+    * @Return: void
+    */
+    private void resize() {
+        if(size / table.length > DEFAULT_LOAD_FACTOR){
+            Node<K,V>[] old = table;
+            table = new Node[table.length << 1];
+            Queue<Node<K,V>> queue = new LinkedList<>();
+            for (int i = 0; i < old.length; i++){
+                if(old[i] != null){
+                    queue.offer(old[i]);
+                    while (!queue.isEmpty()){
+                        Node<K, V> node = queue.poll();
+                        if(node.left != null){
+                            queue.offer(node.left);
+                        }
+                        if(node.right != null){
+                            queue.offer(node.right);
+                        }
+                        moveNode(node);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 移动节点到新的哈希表中
+    * @Date: 2021/2/20
+     * @param node
+    * @Return: void
+    */
+    private void moveNode(Node<K,V> node){
+        node.parent = null;
+        node.left = null;
+        node.right = null;
+        int index = index(node.key);
+        Node<K, V> root = table[index];
+        if(root == null){
+            root = node;
+            afterPut(root);
+            table[index] = root;
+        }else{
+            // 向左右查找并记录parent节点
+            Node<K,V> temp = root;
+            Node<K,V> parent = null;
+            Node<K,V> result;
+            int flag = 0;
+            while (temp != null) {
+                parent = temp;
+                if(temp.hashCode > node.hashCode){
+                    flag = 1;
+                }else if(temp.hashCode < node.hashCode){
+                    flag = -1;
+                }else if(node.key != null && temp.key != null && node.key.getClass() == temp.key.getClass() && node.key instanceof Comparable && (flag = ((Comparable)temp.key).compareTo(node.key)) != 0){
+
+                }else{
+                    flag = System.identityHashCode(temp.key) - System.identityHashCode(node.key);
+                }
+                if(flag > 0){
+                    temp = temp.left;
+                }else if(flag < 0){
+                    temp = temp.right;
+                }
+            }
+            // 使用节点元素与新增元素的比较值value值来判断放左边还是右边
+            if (flag > 0) {
+                parent.left = node;
+            }else if(flag < 0){
+                parent.right = node;
+            }
+            node.parent = parent;
+            // 新增后的处理
+            afterPut(node);
         }
     }
 

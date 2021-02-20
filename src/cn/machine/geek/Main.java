@@ -12,10 +12,11 @@ import cn.machine.geek.structure.map.HashMap;
 public class Main {
     public static void main(String[] args) {
         HashMap<Object,Integer> map = new HashMap<>();
-        for (int i = 0; i < 20; i++){
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 70000; i++){
             map.put(i,i * 10);
         }
-
+        System.out.println(System.currentTimeMillis() - start);
         System.out.println(map.size());
 
         System.out.println(map.get(2));
