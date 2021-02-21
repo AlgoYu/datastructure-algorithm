@@ -1,6 +1,7 @@
 package cn.machine.geek;
 
 import cn.machine.geek.structure.heap.BinaryHeap;
+import cn.machine.geek.structure.queue.PriorityQueue;
 
 
 /**
@@ -11,18 +12,16 @@ import cn.machine.geek.structure.heap.BinaryHeap;
  */
 public class Main {
     public static void main(String[] args) {
-        BinaryHeap<Integer> binaryHeap = new BinaryHeap<>();
-        binaryHeap.add(5);
-        binaryHeap.add(7);
-        binaryHeap.add(10);
-        binaryHeap.add(2);
-        binaryHeap.add(78);
-        binaryHeap.add(64);
-        System.out.println(binaryHeap.get());
-        System.out.println(binaryHeap.remove());
-        System.out.println(binaryHeap.remove());
-        System.out.println(binaryHeap.remove());
-        System.out.println(binaryHeap.remove());
-        System.out.println(binaryHeap.remove());
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
+        priorityQueue.enQueue(19);
+        priorityQueue.enQueue(42);
+        priorityQueue.enQueue(345);
+        priorityQueue.enQueue(55);
+        priorityQueue.enQueue(10);
+        System.out.println(priorityQueue.deQueue());
+        System.out.println(priorityQueue.deQueue());
+        System.out.println(priorityQueue.deQueue());
+        System.out.println(priorityQueue.deQueue());
+        System.out.println(priorityQueue.deQueue());
     }
 }

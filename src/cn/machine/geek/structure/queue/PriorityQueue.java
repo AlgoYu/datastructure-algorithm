@@ -1,86 +1,58 @@
-package cn.machine.geek.structure.heap;
+package cn.machine.geek.structure.queue;
 
 import java.util.Comparator;
 
 /**
  * @Author: MachineGeek
- * @Description: 二叉堆
+ * @Description: 优先级队列
  * @Email: 794763733@qq.com
- * @Date: 2021/2/20
+ * @Date: 2021/2/21
  */
-public class BinaryHeap<E> {
+public class PriorityQueue<E> {
     private E[] elements;
-    private int size;
     private static final int CAPACITY = 10;
+    private int size;
     private Comparator<E> comparator;
 
-    public BinaryHeap(E[] elements, Comparator<E> comparator) {
+    public PriorityQueue(Comparator<E> comparator) {
         this.comparator = comparator;
-        if(elements != null && elements.length > 0){
-            int length = Math.max(CAPACITY,elements.length);
-            this.elements = (E[]) new Object[length];
-            size = elements.length;
-            for (int i = 0; i < size; i++){
-                this.elements[i] = elements[i];
-            }
-            heapify();
-        }else{
-            this.elements = (E[]) new Object[CAPACITY];
-        }
+        this.elements = (E[]) new Object[CAPACITY];
     }
 
-    public BinaryHeap(Comparator<E> comparator) {
-        this(null,comparator);
-    }
-
-    public BinaryHeap() {
+    public PriorityQueue() {
         this(null);
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 返回元素
-    * @Date: 2021/2/20
+     * @Author: MachineGeek
+     * @Description: 返回元素
+     * @Date: 2021/2/20
      * @param
-    * @Return: int
-    */
+     * @Return: int
+     */
     public int size(){
         return size;
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 是否为空
-    * @Date: 2021/2/20
+     * @Author: MachineGeek
+     * @Description: 是否为空
+     * @Date: 2021/2/20
      * @param
-    * @Return: boolean
-    */
+     * @Return: boolean
+     */
     public boolean isEmpty(){
         return size == 0;
     }
 
     /**
     * @Author: MachineGeek
-    * @Description: 清空二叉堆
-    * @Date: 2021/2/20
-     * @param
-    * @Return: void
-    */
-    public void clear(){
-        for (int i = 0; i < size; i++){
-            elements[i] = null;
-        }
-        size = 0;
-    }
-
-    /**
-    * @Author: MachineGeek
-    * @Description: 增加元素
-    * @Date: 2021/2/20
+    * @Description: 入队
+    * @Date: 2021/2/21
      * @param element
     * @Return: void
     */
-    public void add(E element){
+    public void enQueue(E element){
         if(element == null){
             throw new RuntimeException("Element is not be null");
         }
@@ -91,41 +63,12 @@ public class BinaryHeap<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 获取堆顶元素
-    * @Date: 2021/2/21
-     * @param
-    * @Return: E
-    */
-    public E get(){
-        checkRange();
-        return elements[0];
-    }
-
-    /**
-    * @Author: MachineGeek
-    * @Description: 删除堆顶元素
-    * @Date: 2021/2/21
-     * @param
-    * @Return: E
-    */
-    public E remove(){
-        checkRange();
-        E temp = elements[0];
-        elements[0] = elements[size - 1];
-        elements[size - 1] = null;
-        size--;
-        siftDown(0);
-        return temp;
-    }
-
-    /**
-    * @Author: MachineGeek
-    * @Description: 替换堆顶元素
-    * @Date: 2021/2/21
+     * @Author: MachineGeek
+     * @Description: 替换堆顶元素
+     * @Date: 2021/2/21
      * @param element
-    * @Return: E
-    */
+     * @Return: E
+     */
     public E replace(E element){
         if(element == null){
             throw new RuntimeException("Element is not be null!");
@@ -144,8 +87,57 @@ public class BinaryHeap<E> {
 
     /**
     * @Author: MachineGeek
-    * @Description: 让index位置的元素上滤
-    * @Date: 2021/2/20
+    * @Description: 出队
+    * @Date: 2021/2/21
+     * @param
+    * @Return: E
+    */
+    public E deQueue(){
+        checkRange();
+        E temp = elements[0];
+        elements[0] = elements[size - 1];
+        elements[size - 1] = null;
+        size--;
+        siftDown(0);
+        return temp;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 获取队头元素
+    * @Date: 2021/2/21
+     * @param
+    * @Return: E
+    */
+    public E front(){
+        checkRange();
+        return elements[0];
+    }
+
+    public void clear(){
+        for (int i = 0; i < elements.length; i++){
+            elements[i] = null;
+        }
+        size = 0;
+    }
+
+    /**
+     * @Author: MachineGeek
+     * @Description: 检查值域
+     * @Date: 2021/2/20
+     * @param
+     * @Return: void
+     */
+    private void checkRange(){
+        if(size == 0){
+            throw new RuntimeException("Heap is empty!");
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 上滤
+    * @Date: 2021/2/21
      * @param index
     * @Return: void
     */
@@ -167,12 +159,12 @@ public class BinaryHeap<E> {
     }
 
     /**
-     * @Author: MachineGeek
-     * @Description: 让index位置的元素下滤
-     * @Date: 2021/2/20
+    * @Author: MachineGeek
+    * @Description: 下滤
+    * @Date: 2021/2/21
      * @param index
-     * @Return: void
-     */
+    * @Return: void
+    */
     private void siftDown(int index){
         E temp = elements[index];
         // 如果index小于floor(size/2)，则说明存在子节点。
@@ -198,32 +190,6 @@ public class BinaryHeap<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 批量建堆
-    * @Date: 2021/2/21
-     * @param
-    * @Return: void
-    */
-    private void heapify(){
-        for (int i = (size >> 1) - 1; i >= 0; i--){
-            siftDown(i);
-        }
-    }
-
-    /**
-    * @Author: MachineGeek
-    * @Description: 检查值域
-    * @Date: 2021/2/20
-     * @param
-    * @Return: void
-    */
-    private void checkRange(){
-        if(size == 0){
-            throw new RuntimeException("Heap is empty!");
-        }
-    }
-
-    /**
      * @Author: MachineGeek
      * @Description: 扩容方法
      * @Date: 2020/12/2
@@ -241,13 +207,13 @@ public class BinaryHeap<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 比较元素
-    * @Date: 2021/2/20
+     * @Author: MachineGeek
+     * @Description: 比较元素
+     * @Date: 2021/2/20
      * @param element1
      * @param element2
-    * @Return: int
-    */
+     * @Return: int
+     */
     private int compare(E element1,E element2){
         if(comparator != null){
             return comparator.compare(element1,element2);
