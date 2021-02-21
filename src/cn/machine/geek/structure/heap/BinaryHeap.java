@@ -1,6 +1,5 @@
 package cn.machine.geek.structure.heap;
 
-import java.time.Year;
 import java.util.Comparator;
 
 /**
@@ -15,9 +14,23 @@ public class BinaryHeap<E> {
     private static final int CAPACITY = 10;
     private Comparator<E> comparator;
 
-    public BinaryHeap(Comparator<E> comparator) {
+    public BinaryHeap(E[] elements, Comparator<E> comparator) {
         this.comparator = comparator;
-        this.elements = (E[]) new Object[CAPACITY];
+        if(elements != null && elements.length > 0){
+            int length = Math.max(CAPACITY,elements.length);
+            this.elements = (E[]) new Object[length];
+            size = elements.length;
+            for (int i = 0; i < size; i++){
+                this.elements[i] = elements[i];
+            }
+            heapify();
+        }else{
+            this.elements = (E[]) new Object[CAPACITY];
+        }
+    }
+
+    public BinaryHeap(Comparator<E> comparator) {
+        this(null,comparator);
     }
 
     public BinaryHeap() {
@@ -77,11 +90,25 @@ public class BinaryHeap<E> {
         size++;
     }
 
+    /**
+    * @Author: MachineGeek
+    * @Description: 获取堆顶元素
+    * @Date: 2021/2/21
+     * @param
+    * @Return: E
+    */
     public E get(){
         checkRange();
         return elements[0];
     }
 
+    /**
+    * @Author: MachineGeek
+    * @Description: 删除堆顶元素
+    * @Date: 2021/2/21
+     * @param
+    * @Return: E
+    */
     public E remove(){
         checkRange();
         E temp = elements[0];
@@ -90,6 +117,29 @@ public class BinaryHeap<E> {
         size--;
         siftDown(0);
         return temp;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 替换堆顶元素
+    * @Date: 2021/2/21
+     * @param element
+    * @Return: E
+    */
+    public E replace(E element){
+        if(element == null){
+            throw new RuntimeException("Element is not be null!");
+        }
+        if(size == 0){
+            elements[0] = element;
+            size++;
+            return null;
+        }else{
+            E old = elements[0];
+            elements[0] = element;
+            siftDown(0);
+            return old;
+        }
     }
 
     /**
@@ -140,11 +190,24 @@ public class BinaryHeap<E> {
             }
             // 叶子节点覆盖当前节点
             elements[index] = elements[childIndex];
-            // 进入右子节点循环
+            // 进入子节点循环
             index = childIndex;
         }
         // 找到最后的索引放入值
         elements[index] = temp;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 批量建堆
+    * @Date: 2021/2/21
+     * @param
+    * @Return: void
+    */
+    private void heapify(){
+        for (int i = (size >> 1) - 1; i >= 0; i--){
+            siftDown(i);
+        }
     }
 
     /**
