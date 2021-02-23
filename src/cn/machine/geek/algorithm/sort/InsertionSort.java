@@ -15,16 +15,34 @@ public class InsertionSort<E> {
         }
         // 遍历数组
         for (int i = 1; i < elements.length; i++){
-            // 记录当前元素
-            int index = i;
-            E temp = elements[index];
-            // 与前面的元素进行比较，如果前面的元素比较大，就直接拿前面的元素覆盖当前位置
-            while (index > 0 && comparator.compare(temp,elements[index - 1]) < 0){
-                elements[index] = elements[index - 1];
-                index = index - 1;
+            E temp = elements[i];
+            int index = search(elements,temp,i,comparator);
+            for (int j = i; j > index; j--){
+                elements[j] = elements[j - 1];
             }
-            // 最后把元素放入合适的位置
             elements[index] = temp;
         }
+    }
+
+    /**
+     * @Author: MachineGeek
+     * @Description: 利用二分搜索优化
+     * @Date: 2021/2/23
+     * @param elements
+     * @param element
+     * @param comparator
+     * @Return: int
+     */
+    private int search(E[] elements,E element, int length, Comparator<E> comparator){
+        int left = 0,right = length;
+        while (left < right){
+            int mid = (left + right) >> 1;
+            if(comparator.compare(element,elements[mid]) > 0){
+                left = mid + 1;
+            }else{
+                right = mid;
+            }
+        }
+        return left;
     }
 }
