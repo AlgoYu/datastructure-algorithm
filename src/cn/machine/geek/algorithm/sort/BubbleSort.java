@@ -13,9 +13,9 @@ public class BubbleSort<E> {
         if(elements == null || comparator == null || elements.length < 2){
             return;
         }
-        // 外层循环递减作为已排好序的位置
+        // 外层循环递减作为未排序元素的长度
         for (int i = elements.length - 1; i > 0; i--){
-            // 记录最后一次交换值
+            // 记录最后一次交换值的索引
             int lastSwap = 1;
             // 遍历一遍未排序的元素
             for (int j = 1; j <= i; j++){

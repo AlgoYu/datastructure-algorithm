@@ -13,7 +13,7 @@ public class SelectionSort<E> {
         if(elements == null || comparator == null || elements.length < 2){
             return;
         }
-        // 外层循环递减作为已排好序的位置
+        // 外层循环递减作为未排序元素的长度
         for (int i = elements.length - 1; i > 0; i--){
             // 记录最大元素的下标
             int index = 0;
