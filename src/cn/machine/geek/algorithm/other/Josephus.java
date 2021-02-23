@@ -1,4 +1,4 @@
-package cn.machine.geek.algorithm;
+package cn.machine.geek.algorithm.other;
 
 /**
  * @Author: MachineGeek
