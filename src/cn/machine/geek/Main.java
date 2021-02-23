@@ -2,6 +2,7 @@ package cn.machine.geek;
 
 import cn.machine.geek.algorithm.sort.BubbleSort;
 import cn.machine.geek.algorithm.sort.HeapSort;
+import cn.machine.geek.algorithm.sort.InsertionSort;
 import cn.machine.geek.algorithm.sort.SelectionSort;
 import cn.machine.geek.structure.heap.BinaryHeap;
 import cn.machine.geek.structure.trie.Trie;
@@ -18,8 +19,8 @@ import java.util.Comparator;
  */
 public class Main {
     public static void main(String[] args) {
-        Integer[] elements = new Integer[]{3,4,4,5,6,1,10,2,9,7};
-        new HeapSort<Integer>().sort(elements, new Comparator<Integer>() {
+        Integer[] elements = new Integer[]{3,4,4,5,6,1,10,2,9,7,8};
+        new InsertionSort<Integer>().sort(elements, new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
                 return o1 - o2;
