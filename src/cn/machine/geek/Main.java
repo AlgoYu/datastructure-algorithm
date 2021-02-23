@@ -1,10 +1,7 @@
 package cn.machine.geek;
 
 import cn.machine.geek.algorithm.search.BinarySearch;
-import cn.machine.geek.algorithm.sort.BubbleSort;
-import cn.machine.geek.algorithm.sort.HeapSort;
-import cn.machine.geek.algorithm.sort.InsertionSort;
-import cn.machine.geek.algorithm.sort.SelectionSort;
+import cn.machine.geek.algorithm.sort.*;
 import cn.machine.geek.structure.heap.BinaryHeap;
 import cn.machine.geek.structure.trie.Trie;
 
@@ -27,11 +24,9 @@ public class Main {
                 return o1 - o2;
             }
         };
-        new InsertionSort<Integer>().sort(elements, comparator);
         long time = System.currentTimeMillis();
+        new MergeSort<Integer>().sort(elements, comparator);
+        System.out.println("耗时：" + (System.currentTimeMillis() - time) + "毫秒");
         System.out.println(Arrays.toString(elements));
-        System.out.println(System.currentTimeMillis() - time);
-
-        System.out.println(new BinarySearch<Integer>().search(elements,2,comparator));
     }
 }
