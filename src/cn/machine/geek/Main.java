@@ -17,7 +17,7 @@ import java.util.Comparator;
  */
 public class Main {
     public static void main(String[] args) {
-        Integer[] elements = new Integer[]{3,4,4,5,6,1,10,2,9,7,8};
+        Integer[] elements = new Integer[]{500,3,4,4,5,6,1,10,2,9,7,8};
         Comparator<Integer> comparator = new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
@@ -25,7 +25,7 @@ public class Main {
             }
         };
         long time = System.currentTimeMillis();
-        new CountSort().sort(elements);
+        new RadixSort().sort(elements);
         System.out.println("耗时：" + (System.currentTimeMillis() - time) + "毫秒");
         System.out.println(Arrays.toString(elements));
     }
