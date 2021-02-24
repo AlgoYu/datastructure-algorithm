@@ -1,13 +1,6 @@
 package cn.machine.geek;
 
-import cn.machine.geek.algorithm.search.BinarySearch;
-import cn.machine.geek.algorithm.sort.*;
-import cn.machine.geek.structure.heap.BinaryHeap;
-import cn.machine.geek.structure.trie.Trie;
-import cn.machine.geek.structure.unionfind.UnionFind;
-
-import java.util.Arrays;
-import java.util.Comparator;
+import cn.machine.geek.structure.unionfind.UnionFindSize;
 
 
 /**
@@ -18,7 +11,7 @@ import java.util.Comparator;
  */
 public class Main {
     public static void main(String[] args) {
-        UnionFind unionFind = new UnionFind(12);
+        UnionFindSize unionFind = new UnionFindSize(12);
         unionFind.union(0,1);
         unionFind.union(0,2);
         unionFind.union(0,3);
