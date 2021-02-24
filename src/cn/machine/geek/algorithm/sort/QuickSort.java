@@ -13,7 +13,7 @@ public class QuickSort<E> {
         if(elements == null || comparator == null || elements.length < 2){
             return;
         }
-        pivot(elements,0,elements.length,comparator);
+        pivot(elements,0,elements.length - 1,comparator);
     }
 
     /**
@@ -55,8 +55,6 @@ public class QuickSort<E> {
         E temp = elements[mid];
         elements[mid] = elements[left];
         elements[left] = temp;
-        // 使右边指向第一个元素
-        right--;
         // 左右指针只要不相撞就循环
         while (left < right){
             // 从右往左扫描，小于轴点的值直接覆盖左边，同时自己也成为一个垃圾值。
