@@ -25,7 +25,7 @@ public class Main {
             }
         };
         long time = System.currentTimeMillis();
-        new MergeSort<Integer>().sort(elements, comparator);
+        new QuickSort<Integer>().sort(elements, comparator);
         System.out.println("耗时：" + (System.currentTimeMillis() - time) + "毫秒");
         System.out.println(Arrays.toString(elements));
     }
