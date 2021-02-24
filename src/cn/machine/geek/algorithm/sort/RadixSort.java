@@ -8,6 +8,9 @@ package cn.machine.geek.algorithm.sort;
  */
 public class RadixSort {
     public void sort(Integer[] elements){
+        if(elements == null || elements.length < 2){
+            return;
+        }
         // 找出最大数
         int max = elements[0];
         for (int i = 1; i < elements.length; i++){
