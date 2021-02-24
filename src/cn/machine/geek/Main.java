@@ -4,6 +4,7 @@ import cn.machine.geek.algorithm.search.BinarySearch;
 import cn.machine.geek.algorithm.sort.*;
 import cn.machine.geek.structure.heap.BinaryHeap;
 import cn.machine.geek.structure.trie.Trie;
+import cn.machine.geek.structure.unionfind.UnionFind;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -17,17 +18,23 @@ import java.util.Comparator;
  */
 public class Main {
     public static void main(String[] args) {
-        Integer[] elements = new Integer[]{500,3,4,4,5,6,1,10,2,9,7,8};
-        Double[] elements1 = new Double[]{0.3,0.1,0.2,0.3,0.5,0.5,0.5,0.6,0.7,0.8,0.9,0.2};
-        Comparator<Integer> comparator = new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1 - o2;
-            }
-        };
-        long time = System.currentTimeMillis();
-        new BucketSort().sort(elements1);
-        System.out.println("耗时：" + (System.currentTimeMillis() - time) + "毫秒");
-        System.out.println(Arrays.toString(elements1));
+        UnionFind unionFind = new UnionFind(12);
+        unionFind.union(0,1);
+        unionFind.union(0,2);
+        unionFind.union(0,3);
+        unionFind.union(0,4);
+        unionFind.union(0,5);
+
+        unionFind.union(6,7);
+
+        unionFind.union(8,9);
+        unionFind.union(8,10);
+        unionFind.union(8,11);
+
+        System.out.println(unionFind.isSame(0,6));
+        System.out.println(unionFind.isSame(0,8));
+        unionFind.union(0,8);
+        System.out.println(unionFind.isSame(0,8));
+        System.out.println(unionFind.find(0));
     }
 }
