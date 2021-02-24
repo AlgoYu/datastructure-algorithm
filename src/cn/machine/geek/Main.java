@@ -25,7 +25,7 @@ public class Main {
             }
         };
         long time = System.currentTimeMillis();
-        new ShellSort<Integer>().sort(elements, comparator);
+        new CountSort().sort(elements);
         System.out.println("耗时：" + (System.currentTimeMillis() - time) + "毫秒");
         System.out.println(Arrays.toString(elements));
     }
