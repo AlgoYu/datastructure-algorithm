@@ -1,5 +1,6 @@
 package cn.machine.geek;
 
+import cn.machine.geek.structure.graph.Graph;
 import cn.machine.geek.structure.unionfind.UnionFind;
 import cn.machine.geek.structure.unionfind.UnionFindSize;
 
@@ -12,26 +13,13 @@ import cn.machine.geek.structure.unionfind.UnionFindSize;
  */
 public class Main {
     public static void main(String[] args) {
-        UnionFind<Integer> unionFind = new UnionFind<>();
-        for (int i = 0; i <= 11; i++){
-            unionFind.makeSet(i);
-        }
-        unionFind.union(0,1);
-        unionFind.union(0,2);
-        unionFind.union(0,3);
-        unionFind.union(0,4);
-        unionFind.union(0,5);
-
-        unionFind.union(6,7);
-
-        unionFind.union(8,9);
-        unionFind.union(8,10);
-        unionFind.union(8,11);
-
-        System.out.println(unionFind.isSame(0,6));
-        System.out.println(unionFind.isSame(0,8));
-        unionFind.union(0,8);
-        System.out.println(unionFind.isSame(0,8));
-        System.out.println(unionFind.find(0));
+        Graph<String,Integer> graph = new Graph<>();
+        graph.addEdge("V1","V2",3);
+        graph.addEdge("V2","V1",5);
+        graph.removeEdge("V1","V2");
+        graph.removeEdge("V2","V1");
+        graph.addVertex("V3");
+        graph.addEdge("V1","V3",10);
+        graph.addEdge("V1","V3",11);
     }
 }
