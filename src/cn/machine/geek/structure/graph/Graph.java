@@ -1,7 +1,5 @@
 package cn.machine.geek.structure.graph;
 
-import com.sun.xml.internal.bind.v2.model.core.ID;
-
 import java.util.*;
 
 /**
@@ -13,6 +11,7 @@ import java.util.*;
 public class Graph<V,E> {
     private Map<V,Vertex<V,E>> vertexs;
     private Set<Edge<V,E>> edges;
+    private Set<Vertex<V,E>> visited;
 
     /**
     * @Author: MachineGeek
@@ -77,9 +76,21 @@ public class Graph<V,E> {
         }
     }
 
+    /**
+    * @Author: MachineGeek
+    * @Description: 遍历器
+    * @Date: 2021/2/25
+    * @Return:
+    */
+    public static abstract class Visitor<V>{
+        boolean stop;
+        protected abstract boolean operate(V value);
+    }
+
     public Graph() {
         this.vertexs = new HashMap<>();
         this.edges = new HashSet<>();
+        this.visited = new HashSet<>();
     }
 
     /**
@@ -210,6 +221,96 @@ public class Graph<V,E> {
         if(fromVertex.outEdges.remove(edge)){
             toVertex.inEdges.remove(edge);
             edges.remove(edge);
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 深度优先搜索
+    * @Date: 2021/2/25
+     * @param first
+     * @param visitor
+    * @Return: void
+    */
+    public void depthFirstSearch(V first,Visitor<V> visitor){
+        if(visitor == null || vertexs.size() == 0){
+            return;
+        }
+        Vertex<V, E> vertex = vertexs.get(first);
+        // 清空已遍历
+        visited.clear();
+        // 深度优先搜索
+        dfs(vertex,visitor);
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 深度优先搜索
+    * @Date: 2021/2/25
+     * @param vertex
+     * @param visitor
+    * @Return: void
+    */
+    private void dfs(Vertex<V,E> vertex,Visitor<V> visitor){
+        // 如果顶点为空，或者已被遍历，或遍历器要求停止，则退出
+        if(vertex == null || visitor.stop){
+            return;
+        }
+        // 遍历当前顶点
+        visitor.operate(vertex.value);
+        // 标记访问
+        visited.add(vertex);
+        // 遍历所有的能访问的顶点
+        for (Edge<V,E> edge : vertex.outEdges){
+            // 未被访问的进入递归遍历
+            if(!visited.contains(edge.to)){
+                dfs(edge.to,visitor);
+                if(visitor.stop){
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 广度优先搜索
+    * @Date: 2021/2/25
+     * @param
+    * @Return: void
+    */
+    public void breadthFirstSearch(V first,Visitor<V> visitor){
+        if(visitor == null || vertexs.size() == 0){
+            return;
+        }
+        // 如果顶点为空直接退出
+        Vertex<V, E> vertex = vertexs.get(first);
+        if(vertex == null){
+            return;
+        }
+        // 清空已遍历
+        visited.clear();
+        // 广度优先遍历
+        Queue<Vertex<V,E>> queue = new LinkedList<>();
+        queue.offer(vertex);
+        // 队列不为空则一直遍历
+        while (!queue.isEmpty()){
+            // 取出队头顶点
+            Vertex<V, E> poll = queue.poll();
+            // 访问
+            visitor.operate(poll.value);
+            // 标记被访问
+            visited.add(poll);
+            // 如果遍历器要求停止则退出
+            if(visitor.stop){
+                return;
+            }
+            // 加入所有的能访问但未被访问的顶点
+            for (Edge<V,E> edge : poll.outEdges){
+                if(!visited.contains(edge.to)){
+                    queue.offer(edge.to);
+                }
+            }
         }
     }
 }
