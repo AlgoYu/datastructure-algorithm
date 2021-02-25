@@ -1,5 +1,6 @@
 package cn.machine.geek;
 
+import cn.machine.geek.structure.unionfind.UnionFind;
 import cn.machine.geek.structure.unionfind.UnionFindSize;
 
 
@@ -11,7 +12,10 @@ import cn.machine.geek.structure.unionfind.UnionFindSize;
  */
 public class Main {
     public static void main(String[] args) {
-        UnionFindSize unionFind = new UnionFindSize(12);
+        UnionFind<Integer> unionFind = new UnionFind<>();
+        for (int i = 0; i <= 11; i++){
+            unionFind.makeSet(i);
+        }
         unionFind.union(0,1);
         unionFind.union(0,2);
         unionFind.union(0,3);
