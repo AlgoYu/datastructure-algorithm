@@ -11,7 +11,6 @@ import java.util.*;
 public class Graph<V,E> {
     private Map<V,Vertex<V,E>> vertexs;
     private Set<Edge<V,E>> edges;
-    private Set<Vertex<V,E>> visited;
 
     /**
     * @Author: MachineGeek
@@ -90,7 +89,6 @@ public class Graph<V,E> {
     public Graph() {
         this.vertexs = new HashMap<>();
         this.edges = new HashSet<>();
-        this.visited = new HashSet<>();
     }
 
     /**
@@ -237,36 +235,29 @@ public class Graph<V,E> {
             return;
         }
         Vertex<V, E> vertex = vertexs.get(first);
-        // 清空已遍历
-        visited.clear();
-        // 深度优先搜索
-        dfs(vertex,visitor);
-    }
-
-    /**
-    * @Author: MachineGeek
-    * @Description: 深度优先搜索
-    * @Date: 2021/2/25
-     * @param vertex
-     * @param visitor
-    * @Return: void
-    */
-    private void dfs(Vertex<V,E> vertex,Visitor<V> visitor){
-        // 如果顶点为空，或者已被遍历，或遍历器要求停止，则退出
-        if(vertex == null || visitor.stop){
-            return;
-        }
-        // 遍历当前顶点
-        visitor.operate(vertex.value);
-        // 标记访问
-        visited.add(vertex);
-        // 遍历所有的能访问的顶点
-        for (Edge<V,E> edge : vertex.outEdges){
-            // 未被访问的进入递归遍历
-            if(!visited.contains(edge.to)){
-                dfs(edge.to,visitor);
-                if(visitor.stop){
-                    return;
+        // 创建标记已访问Set
+        Set<Vertex<V,E>> visited = new HashSet<>();
+        // 创建回退栈
+        Stack<Vertex<V,E>> vertexStack = new Stack<>();
+        // 加入栈
+        vertexStack.push(vertex);
+        // 深度优先遍历
+        while (!vertexStack.isEmpty()){
+            Vertex<V, E> pop = vertexStack.pop();
+            // 如果未被访问
+            if(!visited.contains(pop)){
+                // 访问
+                visitor.operate(pop.value);
+                // 标记访问
+                visited.add(pop);
+            }
+            // 找一条边进入
+            for (Edge<V,E> edge : pop.outEdges){
+                if(!visited.contains(edge.to)){
+                    // 把当前顶点入栈
+                    vertexStack.push(pop);
+                    // 把要去的顶点入栈
+                    vertexStack.push(edge.to);
                 }
             }
         }
@@ -288,8 +279,8 @@ public class Graph<V,E> {
         if(vertex == null){
             return;
         }
-        // 清空已遍历
-        visited.clear();
+        // 创建标记已访问Set
+        Set<Vertex<V,E>> visited = new HashSet<>();
         // 广度优先遍历
         Queue<Vertex<V,E>> queue = new LinkedList<>();
         queue.offer(vertex);

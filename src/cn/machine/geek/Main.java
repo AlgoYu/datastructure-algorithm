@@ -16,10 +16,16 @@ public class Main {
         Graph<String,Integer> graph = new Graph<>();
         graph.addEdge("V1","V2",3);
         graph.addEdge("V2","V1",5);
-        graph.removeEdge("V1","V2");
-        graph.removeEdge("V2","V1");
-        graph.addVertex("V3");
-        graph.addEdge("V1","V3",10);
-        graph.addEdge("V1","V3",11);
+        graph.addEdge("V1","V4",5);
+        graph.addEdge("V2","V5",5);
+        graph.addEdge("V5","V8",5);
+        graph.addEdge("V8","V1",5);
+        graph.depthFirstSearch("V1", new Graph.Visitor<String>() {
+            @Override
+            protected boolean operate(String value) {
+                System.out.println(value);
+                return false;
+            }
+        });
     }
 }
