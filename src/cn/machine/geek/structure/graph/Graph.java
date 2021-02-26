@@ -1,7 +1,6 @@
 package cn.machine.geek.structure.graph;
 
 import cn.machine.geek.structure.unionfind.UnionFind;
-
 import java.util.*;
 
 /**
@@ -13,6 +12,7 @@ import java.util.*;
 public class Graph<V,E> {
     private Map<V,Vertex<V,E>> vertexs;
     private Set<Edge<V,E>> edges;
+    private WeightManager<E> weightManager;
 
     /**
     * @Author: MachineGeek
@@ -23,9 +23,9 @@ public class Graph<V,E> {
     public static class Vertex<V,E>{
         private V value;
         // 入边
-        Set<Edge<V,E>> inEdges;
+        private Set<Edge<V,E>> inEdges;
         // 出边
-        Set<Edge<V,E>> outEdges;
+        private Set<Edge<V,E>> outEdges;
 
         public Vertex(V value) {
             this.value = value;
@@ -79,6 +79,32 @@ public class Graph<V,E> {
 
     /**
     * @Author: MachineGeek
+    * @Description: 权重管理器
+    * @Date: 2021/2/26
+    * @Return:
+    */
+    public interface WeightManager<E>{
+        int compare(E e1,E e2);
+        E add(E e1,E e2);
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 路径
+    * @Date: 2021/2/26
+    * @Return:
+    */
+    public static class Path<V,E>{
+        private E weight;
+        private List<Edge<V,E>> paths;
+
+        public Path(E weight) {
+            this.weight = weight;
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
     * @Description: 遍历器
     * @Date: 2021/2/25
     * @Return:
@@ -89,6 +115,11 @@ public class Graph<V,E> {
     }
 
     public Graph() {
+        this(null);
+    }
+
+    public Graph(WeightManager<E> weightManager) {
+        this.weightManager = weightManager;
         this.vertexs = new HashMap<>();
         this.edges = new HashSet<>();
     }
@@ -334,7 +365,7 @@ public class Graph<V,E> {
         PriorityQueue<Edge<V,E>> minHeap = new PriorityQueue<>(new Comparator<Edge<V, E>>() {
             @Override
             public int compare(Edge<V, E> o1, Edge<V, E> o2) {
-                return ((Comparable)o1.weight).compareTo(o2.weight);
+                return weightManager.compare(o1.weight,o2.weight);
             }
         });
         // 把顶点的边都加入堆
@@ -376,7 +407,7 @@ public class Graph<V,E> {
         PriorityQueue<Edge<V,E>> minHeap = new PriorityQueue<>(new Comparator<Edge<V, E>>() {
             @Override
             public int compare(Edge<V, E> o1, Edge<V, E> o2) {
-                return ((Comparable)o1.weight).compareTo(o2.weight);
+                return weightManager.compare(o1.weight,o2.weight);
             }
         });
         // 创建一个并查集
@@ -401,5 +432,78 @@ public class Graph<V,E> {
             }
         }
         return minEdges;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 迪杰斯特拉算法
+    * @Date: 2021/2/26
+     * @param first
+    * @Return: void
+    */
+    public Map<V,Path<V,E>> dijkstra(V first){
+        // 第一个顶点
+        Vertex<V, E> vertex = vertexs.get(first);
+        if(vertex == null){
+            return null;
+        }
+        // 去其他顶点的路径
+        Map<V,Path<V,E>> selectedPaths = new HashMap<>();
+        // 已确定的顶点的路径
+        Map<Vertex<V,E>,Path<V,E>> paths = new HashMap<>();
+        // 初始化可达路径
+        for (Edge<V,E> edge : vertex.outEdges){
+            Path<V,E> path = new Path<>(edge.weight);
+            path.paths.add(edge);
+            paths.put(edge.to,path);
+        }
+        // 遍历可达路径
+        while (!paths.isEmpty()){
+            // 选出最短的一条
+            Map.Entry<Vertex<V,E>, Path<V, E>> minEntry = minPath(paths);
+            // 当前最短路径到达的顶点
+            Vertex<V, E> minVertex = minEntry.getKey();
+            // 加入已选择
+            selectedPaths.put(minVertex.value,minEntry.getValue());
+            // 从路径中删除
+            paths.remove(minVertex);
+            // 对最短到达的顶点的延长路径进行比较
+            for (Edge<V,E> edge : minVertex.outEdges){
+                // 如果已确定顶点 直接跳过
+                if(selectedPaths.containsKey(edge.to.value)){
+                    continue;
+                }
+                // 延长路径
+                E newWeight = weightManager.add(minEntry.getValue().weight,edge.weight);
+                // 以前的路径
+                Path<V,E> oldPath = paths.get(edge.to);
+                // 如果以前的路径不存在或者新路径更短则加入新路径
+                if(oldPath != null || weightManager.compare(newWeight,oldPath.weight) >= 0){
+                    continue;
+                }
+                if(oldPath == null){
+                    oldPath = new Path<>(newWeight);
+                    paths.put(edge.to,oldPath);
+                }else{
+                    oldPath.paths.clear();
+                }
+                oldPath.paths.addAll(minEntry.getValue().paths);
+                oldPath.paths.add(edge);
+            }
+        }
+        selectedPaths.remove(vertex.value);
+        return selectedPaths;
+    }
+
+    private Map.Entry<Vertex<V,E>, Path<V, E>> minPath(Map<Vertex<V,E>,Path<V,E>> paths){
+        Iterator<Map.Entry<Vertex<V,E>, Path<V, E>>> iterator = paths.entrySet().iterator();
+        Map.Entry<Vertex<V,E>, Path<V, E>> min = iterator.next();
+        while (iterator.hasNext()){
+            Map.Entry<Vertex<V,E>, Path<V, E>> next = iterator.next();
+            if(weightManager.compare(next.getValue().weight,min.getValue().weight) < 0){
+                min = next;
+            }
+        }
+        return min;
     }
 }
