@@ -1,5 +1,7 @@
 package cn.machine.geek.structure.graph;
 
+import cn.machine.geek.structure.unionfind.UnionFind;
+
 import java.util.*;
 
 /**
@@ -248,6 +250,10 @@ public class Graph<V,E> {
             if(!visited.contains(pop)){
                 // 访问
                 visitor.operate(pop.value);
+                // 如果遍历器要求停止，直接返回
+                if(visitor.stop){
+                    return;
+                }
                 // 标记访问
                 visited.add(pop);
             }
@@ -258,6 +264,7 @@ public class Graph<V,E> {
                     vertexStack.push(pop);
                     // 把要去的顶点入栈
                     vertexStack.push(edge.to);
+                    break;
                 }
             }
         }
@@ -303,5 +310,96 @@ public class Graph<V,E> {
                 }
             }
         }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 普利姆最小生成树
+    * @Date: 2021/2/26
+    * @Return: void
+    */
+    public Set<Edge<V,E>> prim(){
+        if(edges.size() == 0){
+            return null;
+        }
+        // 随便取一个顶点
+        Vertex<V,E> vertex = vertexs.values().iterator().next();
+        // 存放最小生成树路径
+        Set<Edge<V,E>> minEdges = new HashSet<>();
+        // 存放已加入的顶点
+        Set<Vertex<V,E>> linkedVertex = new HashSet<>();
+        // 加入起点
+        linkedVertex.add(vertex);
+        // 创建一个最小堆
+        PriorityQueue<Edge<V,E>> minHeap = new PriorityQueue<>(new Comparator<Edge<V, E>>() {
+            @Override
+            public int compare(Edge<V, E> o1, Edge<V, E> o2) {
+                return ((Comparable)o1.weight).compareTo(o2.weight);
+            }
+        });
+        // 把顶点的边都加入堆
+        for (Edge<V,E> edge : vertex.outEdges){
+            minHeap.offer(edge);
+        }
+        // 最小生成树的边应该只有这么长
+        int minEdgeSize = vertexs.size() - 1;
+        // 堆不为空，并且已加入的边数量小于顶点数量。
+        while (!minHeap.isEmpty() && minEdges.size() < minEdgeSize){
+            // 拿出当前顶点中最小的边
+            Edge<V, E> minEdge = minHeap.remove();
+            // 如果连接边的顶点已经加入集合则跳过
+            if(linkedVertex.contains(minEdge.to)){
+                continue;
+            }
+            // 加入到顶点信息中
+            minEdges.add(minEdge);
+            // 加入顶点
+            linkedVertex.add(minEdge.to);
+            // 把下一个顶点的出边加入到堆中
+            minHeap.addAll(minEdge.to.outEdges);
+        }
+        return minEdges;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 克鲁斯卡尔算法
+    * @Date: 2021/2/26
+     * @param
+    * @Return: java.util.Set<cn.machine.geek.structure.graph.Graph.Edge<V,E>>
+    */
+    public Set<Edge<V,E>> kruskal(){
+        if(edges.size() == 0){
+            return null;
+        }
+        // 创建一个最小堆
+        PriorityQueue<Edge<V,E>> minHeap = new PriorityQueue<>(new Comparator<Edge<V, E>>() {
+            @Override
+            public int compare(Edge<V, E> o1, Edge<V, E> o2) {
+                return ((Comparable)o1.weight).compareTo(o2.weight);
+            }
+        });
+        // 创建一个并查集
+        UnionFind<Vertex<V,E>> unionFind = new UnionFind<>();
+        // 把边都加入堆，把顶点加入并查集。
+        for (Edge<V,E> edge : edges){
+            minHeap.offer(edge);
+            unionFind.makeSet(edge.from);
+            unionFind.makeSet(edge.to);
+        }
+        // 存放最小生成树路径
+        Set<Edge<V,E>> minEdges = new HashSet<>();
+        int minEdgeSize = vertexs.size() - 1;
+        while (!minHeap.isEmpty() && minEdges.size() < minEdgeSize){
+            Edge<V, E> edge = minHeap.remove();
+            // 如果不属于一个集合
+            if(!unionFind.isSame(edge.from,edge.to)){
+                // 加入边
+                minEdges.add(edge);
+                // 并集
+                unionFind.union(edge.from,edge.to);
+            }
+        }
+        return minEdges;
     }
 }

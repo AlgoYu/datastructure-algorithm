@@ -4,6 +4,8 @@ import cn.machine.geek.structure.graph.Graph;
 import cn.machine.geek.structure.unionfind.UnionFind;
 import cn.machine.geek.structure.unionfind.UnionFindSize;
 
+import java.util.Set;
+
 
 /**
  * @Author: MachineGeek
@@ -14,18 +16,16 @@ import cn.machine.geek.structure.unionfind.UnionFindSize;
 public class Main {
     public static void main(String[] args) {
         Graph<String,Integer> graph = new Graph<>();
-        graph.addEdge("V1","V2",3);
-        graph.addEdge("V2","V1",5);
-        graph.addEdge("V1","V4",5);
-        graph.addEdge("V2","V5",5);
-        graph.addEdge("V5","V8",5);
-        graph.addEdge("V8","V1",5);
-        graph.depthFirstSearch("V1", new Graph.Visitor<String>() {
-            @Override
-            protected boolean operate(String value) {
-                System.out.println(value);
-                return false;
-            }
-        });
+        graph.addEdge("0","2",2);
+        graph.addEdge("0","4",7);
+        graph.addEdge("2","0",2);
+        graph.addEdge("2","4",4);
+        graph.addEdge("2","1",3);
+        graph.addEdge("2","5",3);
+        graph.addEdge("2","6",6);
+        graph.addEdge("2","4",7);
+
+        Set<Graph.Edge<String, Integer>> prim = graph.prim();
+        Set<Graph.Edge<String, Integer>> kruskal = graph.kruskal();
     }
 }
