@@ -1,5 +1,6 @@
 package cn.machine.geek.structure.graph;
 
+import cn.machine.geek.structure.unionfind.UnionFind;
 import java.util.*;
 
 /**
@@ -11,7 +12,7 @@ import java.util.*;
 public class Graph<V,E> {
     private Map<V,Vertex<V,E>> vertexs;
     private Set<Edge<V,E>> edges;
-    private Set<Vertex<V,E>> visited;
+    private WeightManager<E> weightManager;
 
     /**
     * @Author: MachineGeek
@@ -22,9 +23,9 @@ public class Graph<V,E> {
     public static class Vertex<V,E>{
         private V value;
         // 入边
-        Set<Edge<V,E>> inEdges;
+        private Set<Edge<V,E>> inEdges;
         // 出边
-        Set<Edge<V,E>> outEdges;
+        private Set<Edge<V,E>> outEdges;
 
         public Vertex(V value) {
             this.value = value;
@@ -78,6 +79,32 @@ public class Graph<V,E> {
 
     /**
     * @Author: MachineGeek
+    * @Description: 权重管理器
+    * @Date: 2021/2/26
+    * @Return:
+    */
+    public interface WeightManager<E>{
+        int compare(E e1,E e2);
+        E add(E e1,E e2);
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 路径
+    * @Date: 2021/2/26
+    * @Return:
+    */
+    public static class Path<V,E>{
+        private E weight;
+        private List<Edge<V,E>> paths;
+
+        public Path(E weight) {
+            this.weight = weight;
+        }
+    }
+
+    /**
+    * @Author: MachineGeek
     * @Description: 遍历器
     * @Date: 2021/2/25
     * @Return:
@@ -88,9 +115,13 @@ public class Graph<V,E> {
     }
 
     public Graph() {
+        this(null);
+    }
+
+    public Graph(WeightManager<E> weightManager) {
+        this.weightManager = weightManager;
         this.vertexs = new HashMap<>();
         this.edges = new HashSet<>();
-        this.visited = new HashSet<>();
     }
 
     /**
@@ -237,36 +268,34 @@ public class Graph<V,E> {
             return;
         }
         Vertex<V, E> vertex = vertexs.get(first);
-        // 清空已遍历
-        visited.clear();
-        // 深度优先搜索
-        dfs(vertex,visitor);
-    }
-
-    /**
-    * @Author: MachineGeek
-    * @Description: 深度优先搜索
-    * @Date: 2021/2/25
-     * @param vertex
-     * @param visitor
-    * @Return: void
-    */
-    private void dfs(Vertex<V,E> vertex,Visitor<V> visitor){
-        // 如果顶点为空，或者已被遍历，或遍历器要求停止，则退出
-        if(vertex == null || visitor.stop){
-            return;
-        }
-        // 遍历当前顶点
-        visitor.operate(vertex.value);
-        // 标记访问
-        visited.add(vertex);
-        // 遍历所有的能访问的顶点
-        for (Edge<V,E> edge : vertex.outEdges){
-            // 未被访问的进入递归遍历
-            if(!visited.contains(edge.to)){
-                dfs(edge.to,visitor);
+        // 创建标记已访问Set
+        Set<Vertex<V,E>> visited = new HashSet<>();
+        // 创建回退栈
+        Stack<Vertex<V,E>> vertexStack = new Stack<>();
+        // 加入栈
+        vertexStack.push(vertex);
+        // 深度优先遍历
+        while (!vertexStack.isEmpty()){
+            Vertex<V, E> pop = vertexStack.pop();
+            // 如果未被访问
+            if(!visited.contains(pop)){
+                // 访问
+                visitor.operate(pop.value);
+                // 如果遍历器要求停止，直接返回
                 if(visitor.stop){
                     return;
+                }
+                // 标记访问
+                visited.add(pop);
+            }
+            // 找一条边进入
+            for (Edge<V,E> edge : pop.outEdges){
+                if(!visited.contains(edge.to)){
+                    // 把当前顶点入栈
+                    vertexStack.push(pop);
+                    // 把要去的顶点入栈
+                    vertexStack.push(edge.to);
+                    break;
                 }
             }
         }
@@ -288,8 +317,8 @@ public class Graph<V,E> {
         if(vertex == null){
             return;
         }
-        // 清空已遍历
-        visited.clear();
+        // 创建标记已访问Set
+        Set<Vertex<V,E>> visited = new HashSet<>();
         // 广度优先遍历
         Queue<Vertex<V,E>> queue = new LinkedList<>();
         queue.offer(vertex);
@@ -312,5 +341,169 @@ public class Graph<V,E> {
                 }
             }
         }
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 普利姆最小生成树
+    * @Date: 2021/2/26
+    * @Return: void
+    */
+    public Set<Edge<V,E>> prim(){
+        if(edges.size() == 0){
+            return null;
+        }
+        // 随便取一个顶点
+        Vertex<V,E> vertex = vertexs.values().iterator().next();
+        // 存放最小生成树路径
+        Set<Edge<V,E>> minEdges = new HashSet<>();
+        // 存放已加入的顶点
+        Set<Vertex<V,E>> linkedVertex = new HashSet<>();
+        // 加入起点
+        linkedVertex.add(vertex);
+        // 创建一个最小堆
+        PriorityQueue<Edge<V,E>> minHeap = new PriorityQueue<>(new Comparator<Edge<V, E>>() {
+            @Override
+            public int compare(Edge<V, E> o1, Edge<V, E> o2) {
+                return weightManager.compare(o1.weight,o2.weight);
+            }
+        });
+        // 把顶点的边都加入堆
+        for (Edge<V,E> edge : vertex.outEdges){
+            minHeap.offer(edge);
+        }
+        // 最小生成树的边应该只有这么长
+        int minEdgeSize = vertexs.size() - 1;
+        // 堆不为空，并且已加入的边数量小于顶点数量。
+        while (!minHeap.isEmpty() && minEdges.size() < minEdgeSize){
+            // 拿出当前顶点中最小的边
+            Edge<V, E> minEdge = minHeap.remove();
+            // 如果连接边的顶点已经加入集合则跳过
+            if(linkedVertex.contains(minEdge.to)){
+                continue;
+            }
+            // 加入到顶点信息中
+            minEdges.add(minEdge);
+            // 加入顶点
+            linkedVertex.add(minEdge.to);
+            // 把下一个顶点的出边加入到堆中
+            minHeap.addAll(minEdge.to.outEdges);
+        }
+        return minEdges;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 克鲁斯卡尔算法
+    * @Date: 2021/2/26
+     * @param
+    * @Return: java.util.Set<cn.machine.geek.structure.graph.Graph.Edge<V,E>>
+    */
+    public Set<Edge<V,E>> kruskal(){
+        if(edges.size() == 0){
+            return null;
+        }
+        // 创建一个最小堆
+        PriorityQueue<Edge<V,E>> minHeap = new PriorityQueue<>(new Comparator<Edge<V, E>>() {
+            @Override
+            public int compare(Edge<V, E> o1, Edge<V, E> o2) {
+                return weightManager.compare(o1.weight,o2.weight);
+            }
+        });
+        // 创建一个并查集
+        UnionFind<Vertex<V,E>> unionFind = new UnionFind<>();
+        // 把边都加入堆，把顶点加入并查集。
+        for (Edge<V,E> edge : edges){
+            minHeap.offer(edge);
+            unionFind.makeSet(edge.from);
+            unionFind.makeSet(edge.to);
+        }
+        // 存放最小生成树路径
+        Set<Edge<V,E>> minEdges = new HashSet<>();
+        int minEdgeSize = vertexs.size() - 1;
+        while (!minHeap.isEmpty() && minEdges.size() < minEdgeSize){
+            Edge<V, E> edge = minHeap.remove();
+            // 如果不属于一个集合
+            if(!unionFind.isSame(edge.from,edge.to)){
+                // 加入边
+                minEdges.add(edge);
+                // 并集
+                unionFind.union(edge.from,edge.to);
+            }
+        }
+        return minEdges;
+    }
+
+    /**
+    * @Author: MachineGeek
+    * @Description: 迪杰斯特拉算法
+    * @Date: 2021/2/26
+     * @param first
+    * @Return: void
+    */
+    public Map<V,Path<V,E>> dijkstra(V first){
+        // 第一个顶点
+        Vertex<V, E> vertex = vertexs.get(first);
+        if(vertex == null){
+            return null;
+        }
+        // 去其他顶点的路径
+        Map<V,Path<V,E>> selectedPaths = new HashMap<>();
+        // 已确定的顶点的路径
+        Map<Vertex<V,E>,Path<V,E>> paths = new HashMap<>();
+        // 初始化可达路径
+        for (Edge<V,E> edge : vertex.outEdges){
+            Path<V,E> path = new Path<>(edge.weight);
+            path.paths.add(edge);
+            paths.put(edge.to,path);
+        }
+        // 遍历可达路径
+        while (!paths.isEmpty()){
+            // 选出最短的一条
+            Map.Entry<Vertex<V,E>, Path<V, E>> minEntry = minPath(paths);
+            // 当前最短路径到达的顶点
+            Vertex<V, E> minVertex = minEntry.getKey();
+            // 加入已选择
+            selectedPaths.put(minVertex.value,minEntry.getValue());
+            // 从路径中删除
+            paths.remove(minVertex);
+            // 对最短到达的顶点的延长路径进行比较
+            for (Edge<V,E> edge : minVertex.outEdges){
+                // 如果已确定顶点 直接跳过
+                if(selectedPaths.containsKey(edge.to.value)){
+                    continue;
+                }
+                // 延长路径
+                E newWeight = weightManager.add(minEntry.getValue().weight,edge.weight);
+                // 以前的路径
+                Path<V,E> oldPath = paths.get(edge.to);
+                // 如果以前的路径不存在或者新路径更短则加入新路径
+                if(oldPath != null || weightManager.compare(newWeight,oldPath.weight) >= 0){
+                    continue;
+                }
+                if(oldPath == null){
+                    oldPath = new Path<>(newWeight);
+                    paths.put(edge.to,oldPath);
+                }else{
+                    oldPath.paths.clear();
+                }
+                oldPath.paths.addAll(minEntry.getValue().paths);
+                oldPath.paths.add(edge);
+            }
+        }
+        selectedPaths.remove(vertex.value);
+        return selectedPaths;
+    }
+
+    private Map.Entry<Vertex<V,E>, Path<V, E>> minPath(Map<Vertex<V,E>,Path<V,E>> paths){
+        Iterator<Map.Entry<Vertex<V,E>, Path<V, E>>> iterator = paths.entrySet().iterator();
+        Map.Entry<Vertex<V,E>, Path<V, E>> min = iterator.next();
+        while (iterator.hasNext()){
+            Map.Entry<Vertex<V,E>, Path<V, E>> next = iterator.next();
+            if(weightManager.compare(next.getValue().weight,min.getValue().weight) < 0){
+                min = next;
+            }
+        }
+        return min;
     }
 }
