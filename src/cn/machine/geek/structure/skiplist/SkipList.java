@@ -12,7 +12,7 @@ public class SkipList<K,V> {
     private int size;
     private Node<K,V> first;
     private Comparator<K> comparator;
-    private static final int MAX_LEVEL = 32;
+    private static final int validL = 32;
     private static final double P = 0.25;
     private int validLevel;
 
@@ -28,14 +28,13 @@ public class SkipList<K,V> {
         }
     }
 
-    public SkipList(int size) {
-        this(size,null);
+    public SkipList() {
+        this(null);
     }
 
-    public SkipList(int size, Comparator<K> comparator) {
-        this.size = size;
+    public SkipList(Comparator<K> comparator) {
         this.comparator = comparator;
-        this.first = new Node<>(null,null,MAX_LEVEL);
+        this.first = new Node<>(null,null, validL);
     }
 
     public int size(){
@@ -58,9 +57,9 @@ public class SkipList<K,V> {
         checkKey(key);
         Node<K,V> node = first;
         // 用于保存向下走的节点
-        Node<K,V>[] downNode = new Node[MAX_LEVEL];
+        Node<K,V>[] downNode = new Node[validLevel];
         // 从最高层开始
-        for (int i = validLevel; i >= 0; i--){
+        for (int i = validLevel - 1; i >= 0; i--){
             int cmp = -1;
             // 如果next不等于空，并且key大于下一个节点，就去next
             while (node.nexts[i] != null && (cmp = compare(key,node.nexts[i].key)) > 0){
@@ -68,8 +67,8 @@ public class SkipList<K,V> {
             }
             // 如果比较结果相等，则覆盖返回
             if(cmp == 0){
-                V oldValue = node.value;
-                node.value = value;
+                V oldValue = node.nexts[i].value;
+                node.nexts[i].value = value;
                 return oldValue;
             }
             // 记录向下走的层和节点
@@ -80,8 +79,12 @@ public class SkipList<K,V> {
         Node<K,V> newNode = new Node<>(key,value,newLevel);
         // 把新节点的高层链表连接
         for (int i = 0; i < newLevel; i++){
-            newNode.nexts[i] = downNode[i].nexts[i];
-            downNode[i].nexts[i] = newNode;
+            if(i >= validLevel){
+                first.nexts[i] = newNode;
+            }else{
+                newNode.nexts[i] = downNode[i].nexts[i];
+                downNode[i].nexts[i] = newNode;
+            }
         }
         size++;
         validLevel = Math.max(validLevel,newLevel);
@@ -99,7 +102,7 @@ public class SkipList<K,V> {
         checkKey(key);
         Node<K,V> node = first;
         // 从最高层开始
-        for (int i = validLevel; i >= 0; i--){
+        for (int i = validLevel - 1; i >= 0; i--){
             int cmp = -1;
             // 如果next不等于空，并且key大于下一个节点，就往下走
             while (node.nexts[i] != null && (cmp = compare(key,node.nexts[i].key)) > 0){
@@ -107,22 +110,29 @@ public class SkipList<K,V> {
             }
             // 如果比较结果相等，则直接返回。
             if(cmp == 0){
-                return node.value;
+                return node.nexts[i].value;
             }
         }
         // 如果所有层都找不到，则返回空
         return null;
     }
 
+    /**
+    * @Author: MachineGeek
+    * @Description: 删除节点
+    * @Date: 2021/2/28
+     * @param key
+    * @Return: V
+    */
     public V remove(K key){
         checkKey(key);
         Node<K,V> node = first;
         // 用于保存向下走的节点
-        Node<K,V>[] downNode = new Node[MAX_LEVEL];
+        Node<K,V>[] downNode = new Node[validL];
         // 标记是否不存在
         boolean exist = false;
         // 从最高层开始
-        for (int i = validLevel; i >= 0; i--){
+        for (int i = validLevel - 1; i >= 0; i--){
             int cmp = -1;
             // 如果next不等于空，并且key大于下一个节点，就去next
             while (node.nexts[i] != null && (cmp = compare(key,node.nexts[i].key)) > 0){
@@ -176,7 +186,7 @@ public class SkipList<K,V> {
     */
     private int randomLevel(){
         int n = 1;
-        while (Math.random() < P && n < MAX_LEVEL){
+        while (Math.random() < P && n < validL){
             n++;
         }
         return n;
