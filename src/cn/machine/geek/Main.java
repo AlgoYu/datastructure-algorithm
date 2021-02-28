@@ -1,11 +1,6 @@
 package cn.machine.geek;
 
-import cn.machine.geek.structure.graph.Graph;
-import cn.machine.geek.structure.skiplist.SkipList;
-import cn.machine.geek.structure.unionfind.UnionFind;
-import cn.machine.geek.structure.unionfind.UnionFindSize;
-
-import java.util.Set;
+import cn.machine.geek.algorithm.search.KMP;
 
 
 /**
@@ -16,14 +11,6 @@ import java.util.Set;
  */
 public class Main {
     public static void main(String[] args) {
-        SkipList<String,Integer> skipList = new SkipList<>();
-        skipList.put("qwe",2);
-        skipList.put("qwe1",4);
-        skipList.put("qwe",5);
-        skipList.put("qwea",2);
-        System.out.println(skipList.remove("qwe"));
-        System.out.println(skipList.remove("qwe1"));
-        System.out.println(skipList.remove("qwe"));
-        System.out.println(skipList.size());
+        System.out.println(KMP.indexOf("DSDSACABCDD","ABCE"));
     }
 }
