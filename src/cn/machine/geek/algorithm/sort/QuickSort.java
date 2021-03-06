@@ -13,7 +13,7 @@ public class QuickSort<E> {
         if(elements == null || comparator == null || elements.length < 2){
             return;
         }
-        pivot(elements,0,elements.length - 1,comparator);
+        pivot(elements,0,elements.length,comparator);
     }
 
     /**

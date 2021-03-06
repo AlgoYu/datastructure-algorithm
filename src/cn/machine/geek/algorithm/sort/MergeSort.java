@@ -14,7 +14,7 @@ public class MergeSort<E> {
         if(elements == null || comparator == null || elements.length < 2){
             return;
         }
-        divide(elements,0,elements.length - 1,comparator);
+        divide(elements,0,elements.length,comparator);
     }
     /**
     * @Author: MachineGeek
@@ -65,7 +65,7 @@ public class MergeSort<E> {
         int rightIndex = mid;
         // 左边数组没有结束
         while (leftIndex < leftLength){
-            if(rightIndex <= right && comparator.compare(elements[rightIndex],leftArray[leftIndex]) < 0){
+            if(rightIndex < right && comparator.compare(elements[rightIndex],leftArray[leftIndex]) < 0){
                 elements[index++] = elements[rightIndex++];
             }else{
                 elements[index++] = leftArray[leftIndex++];
