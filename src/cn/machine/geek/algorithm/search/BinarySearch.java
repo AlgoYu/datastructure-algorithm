@@ -10,13 +10,13 @@ import java.util.Comparator;
  */
 public class BinarySearch<E> {
     public int search(E[] elements,E element, Comparator<E> comparator){
-        if(elements == null || comparator == null || elements.length < 2){
+        if(elements == null || comparator == null || elements.length == 0){
             return -1;
         }
         // 初始化左右边界
-        int left = 0,right = elements.length - 1;
+        int left = 0,right = elements.length;
         // 循环查找排除另一半
-        while (left <= right){
+        while (left < right){
             // 获得中间索引下标
             int mid = (left + right) >> 1;
             // 比较

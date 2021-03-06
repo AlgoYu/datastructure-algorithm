@@ -1,6 +1,9 @@
 package cn.machine.geek;
 
+import cn.machine.geek.algorithm.search.BinarySearch;
 import cn.machine.geek.algorithm.search.KMP;
+
+import java.util.Comparator;
 
 
 /**
@@ -11,6 +14,13 @@ import cn.machine.geek.algorithm.search.KMP;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println(KMP.indexOf("DSDSACABCDD","ABCE"));
+        BinarySearch<Integer> binarySearch = new BinarySearch<>();
+        int search = binarySearch.search(new Integer[]{1}, 2, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 - o2;
+            }
+        });
+        System.out.println(search);
     }
 }

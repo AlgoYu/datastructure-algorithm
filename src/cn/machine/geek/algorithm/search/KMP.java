@@ -23,27 +23,33 @@ public class KMP {
         // 获取公共长度匹配数组
         int[] next = getNext(pChars);
         // 初始下标
-        int ti = 0,pi = 0,delta = tlen - plen;
-        while (pi < plen && ti - pi <= delta){
-            if(pi > 0 && tChars[ti] != pChars[pi]){
+        int ti = 0,pi = 0,tmax = tlen - plen;
+        while (pi < plen && ti - pi <= tmax){
+            if(pi < 0 || tChars[ti] == pChars[pi]){
+                ti++;
+                pi++;
+            }else{
                 pi = next[pi];
-                continue;
             }
-            ti++;
-            pi++;
         }
-        return pi == plen ? ti - plen : -1;
+        return pi == plen ? ti - pi : -1;
     }
 
     private static int[] getNext(char[] pattern){
-        int plen = pattern.length;
-        int[] next = new int[plen];
+        // 创建next数组
+        int[] next = new int[pattern.length];
+        // 初始化
         int i = 0;
         int n = next[i] = -1;
-        int imax = plen - 1;
-        while (i < imax){
+        while (i < pattern.length - 1){
             if(n < 0 || pattern[i] == pattern[n]){
-                next[++i] = ++n;
+                i++;
+                n++;
+                if(pattern[i] == pattern[n]){
+                    next[i] = next[n];
+                }else{
+                    next[i] = n;
+                }
             }else{
                 n = next[n];
             }
