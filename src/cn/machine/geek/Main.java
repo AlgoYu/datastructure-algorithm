@@ -1,7 +1,6 @@
 package cn.machine.geek;
 
 import cn.machine.geek.algorithm.search.BinarySearch;
-import cn.machine.geek.algorithm.search.KMP;
 
 import java.util.Comparator;
 
