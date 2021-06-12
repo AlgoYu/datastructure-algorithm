@@ -87,7 +87,7 @@ public class BloomFilter<E> {
     */
     private boolean get(int index){
         long value = bits[index / Long.SIZE];
-        return (value & 1 << (index % Long.SIZE)) != 0;
+        return (value & 1L << (index % Long.SIZE)) != 0;
     }
 
     /**

@@ -8,13 +8,13 @@ package cn.machine.geek.algorithm.other;
  */
 public class Josephus<E> {
     /**
+     * @param
      * @Author: MachineGeek
      * @Description: 内部节点
      * @Date: 2020/12/17
-     * @param
      * @Return:
      */
-    public class Node<E>{
+    public class Node<E> {
         E element;
         Node<E> next;
 
@@ -23,33 +23,34 @@ public class Josephus<E> {
             this.next = next;
         }
     }
+
     // 头节点
     private Node<E> head;
     // 元素数量
     private int size;
 
     /**
+     * @param index
      * @Author: MachineGeek
      * @Description: 获取元素
      * @Date: 2020/12/17
-     * @param index
      * @Return: void
      */
-    public E get(int index){
+    public E get(int index) {
         return getNode(index).element;
     }
 
     /**
+     * @param index
      * @Author: MachineGeek
      * @Description: 获取节点
      * @Date: 2020/12/17
-     * @param index
      * @Return: E
      */
-    public Node<E> getNode(int index){
+    public Node<E> getNode(int index) {
         checkRange(index);
         Node<E> temp = head;
-        while (index > 0){
+        while (index > 0) {
             temp = temp.next;
             index--;
         }
@@ -57,17 +58,17 @@ public class Josephus<E> {
     }
 
     /**
+     * @param element
      * @Author: MachineGeek
      * @Description: 增加节点
      * @Date: 2020/12/17
-     * @param element
      * @Return: void
      */
-    public void add(E element){
-        Node<E> node = new Node<>(element,null);
-        if(size == 0){
+    public void add(E element) {
+        Node<E> node = new Node<>(element, null);
+        if (size == 0) {
             head = node;
-        }else{
+        } else {
             getNode(size - 1).next = node;
         }
         node.next = head;
@@ -75,40 +76,40 @@ public class Josephus<E> {
     }
 
     /**
+     * @param index
      * @Author: MachineGeek
      * @Description: 检查值域
      * @Date: 2020/12/17
-     * @param index
      * @Return: void
      */
-    private void checkRange(int index){
-        if(index < 0 || index >= size){
+    private void checkRange(int index) {
+        if (index < 0 || index >= size) {
             throw new RuntimeException("范围越界");
         }
     }
 
     /**
+     * @param index
+     * @param element
      * @Author: MachineGeek
      * @Description: 插入节点
      * @Date: 2020/12/17
-     * @param index
-     * @param element
      * @Return: void
      */
-    public void insert(int index, E element){
-        if(index < 0 || index > size){
+    public void insert(int index, E element) {
+        if (index < 0 || index > size) {
             throw new RuntimeException("范围越界");
         }
-        Node<E> node = new Node<>(element,null);
-        if(index == 0){
-            if(size == 0){
+        Node<E> node = new Node<>(element, null);
+        if (index == 0) {
+            if (size == 0) {
                 node.next = node;
-            }else{
+            } else {
                 node.next = head;
                 getNode(size - 1).next = node;
             }
             head = node;
-        }else{
+        } else {
             Node<E> temp = getNode(index - 1);
             node.next = temp.next;
             temp.next = node;
@@ -117,24 +118,24 @@ public class Josephus<E> {
     }
 
     /**
+     * @param index
      * @Author: MachineGeek
      * @Description: 删除节点
      * @Date: 2020/12/17
-     * @param index
      * @Return: E
      */
-    public E remove(int index){
+    public E remove(int index) {
         checkRange(index);
         E element;
-        if(index == 0){
+        if (index == 0) {
             element = head.element;
-            if(size == 1){
+            if (size == 1) {
                 head = null;
-            }else{
+            } else {
                 getNode(size - 1).next = head.next;
                 head = head.next;
             }
-        }else{
+        } else {
             Node<E> node = getNode(index - 1);
             element = node.next.element;
             node.next = node.next.next;
@@ -144,14 +145,14 @@ public class Josephus<E> {
     }
 
     /**
+     * @param index
+     * @param element
      * @Author: MachineGeek
      * @Description: 修改元素
      * @Date: 2020/12/17
-     * @param index
-     * @param element
      * @Return: E
      */
-    public E modify(int index, E element){
+    public E modify(int index, E element) {
         Node<E> node = getNode(index);
         E value = node.element;
         node.element = element;
@@ -159,28 +160,28 @@ public class Josephus<E> {
     }
 
     /**
+     * @param
      * @Author: MachineGeek
      * @Description: 元素数量
      * @Date: 2020/12/17
-     * @param
      * @Return: int
      */
-    public int size(){
+    public int size() {
         return size;
     }
 
     /**
+     * @param element
      * @Author: MachineGeek
      * @Description: 查找元素
      * @Date: 2020/12/17
-     * @param element
      * @Return: int
      */
-    public int indexOf(E element){
+    public int indexOf(E element) {
         Node<E> temp = head;
         int index = 0;
-        while (temp != null && temp.next != head){
-            if(temp.element.equals(element)){
+        while (temp != null && temp.next != head) {
+            if (temp.element.equals(element)) {
                 return index;
             }
             temp = temp.next;
@@ -190,24 +191,24 @@ public class Josephus<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 约瑟夫问题求解
-    * @Date: 2020/12/17
      * @param
-    * @Return: void
-    */
-    public void josephusProblem(int start,int number){
-        if(size < 2){
+     * @Author: MachineGeek
+     * @Description: 约瑟夫问题求解
+     * @Date: 2020/12/17
+     * @Return: void
+     */
+    public void josephusProblem(int start, int number) {
+        if (size < 2) {
             throw new RuntimeException("至少要两个节点以上才可以开始。");
         }
         Node<E> node = getNode(start - 1);
         int i = 0;
-        while (size > 0){
-            while (i < number){
+        while (size > 0) {
+            while (i < number) {
                 node = node.next;
                 i++;
             }
-            System.out.print(node.element+"\t");
+            System.out.print(node.element + "\t");
             node.element = node.next.element;
             node.next = node.next.next;
             i = 0;

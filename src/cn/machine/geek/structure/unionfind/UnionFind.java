@@ -11,15 +11,15 @@ import java.util.Objects;
  * @Date: 2021/2/25
  */
 public class UnionFind<E> {
-    private Map<E,Node<E>> map;
+    private Map<E, Node<E>> map;
 
     /**
-    * @Author: MachineGeek
-    * @Description: 内部节点
-    * @Date: 2021/2/25
-    * @Return:
-    */
-    public static class Node<E>{
+     * @Author: MachineGeek
+     * @Description: 内部节点
+     * @Date: 2021/2/25
+     * @Return:
+     */
+    public static class Node<E> {
         private Node<E> parent;
         private int rank;
         private E element;
@@ -36,45 +36,45 @@ public class UnionFind<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 添加节点
-    * @Date: 2021/2/25
      * @param element
-    * @Return: void
-    */
-    public void makeSet(E element){
+     * @Author: MachineGeek
+     * @Description: 添加节点
+     * @Date: 2021/2/25
+     * @Return: void
+     */
+    public void makeSet(E element) {
         // 不包含则添加
-        if(!map.containsKey(element)){
-            map.put(element,new Node<>(element));
+        if (!map.containsKey(element)) {
+            map.put(element, new Node<>(element));
         }
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 查找元素属于哪个集合
-    * @Date: 2021/2/25
      * @param element
-    * @Return: E
-    */
-    public E find(E element){
+     * @Author: MachineGeek
+     * @Description: 查找元素属于哪个集合
+     * @Date: 2021/2/25
+     * @Return: E
+     */
+    public E find(E element) {
         Node<E> node = findNode(element);
-        return node == null? null : node.element;
+        return node == null ? null : node.element;
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 查找元素的集节点
-    * @Date: 2021/2/25
      * @param element
-    * @Return: cn.machine.geek.structure.unionfind.UnionFind.Node<E>
-    */
-    private Node<E> findNode(E element){
+     * @Author: MachineGeek
+     * @Description: 查找元素的集节点
+     * @Date: 2021/2/25
+     * @Return: cn.machine.geek.structure.unionfind.UnionFind.Node<E>
+     */
+    private Node<E> findNode(E element) {
         Node<E> node = map.get(element);
-        if(node == null){
+        if (node == null) {
             return null;
         }
         // 向上找到父节点，并在这个过程中，使向上寻找的路径减半。
-        while (!Objects.equals(node.element,node.parent.element)){
+        while (!Objects.equals(node.element, node.parent.element)) {
             node.parent = node.parent.parent;
             node = node.parent;
         }
@@ -82,42 +82,42 @@ public class UnionFind<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 查看两个元素是否属于同一个集合
-    * @Date: 2021/2/25
      * @param element1
      * @param element2
-    * @Return: boolean
-    */
-    public boolean isSame(E element1,E element2){
-        return Objects.equals(find(element1),find(element2));
+     * @Author: MachineGeek
+     * @Description: 查看两个元素是否属于同一个集合
+     * @Date: 2021/2/25
+     * @Return: boolean
+     */
+    public boolean isSame(E element1, E element2) {
+        return Objects.equals(find(element1), find(element2));
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 合并两个元素集
-    * @Date: 2021/2/25
      * @param element1
      * @param element2
-    * @Return: void
-    */
-    public void union(E element1,E element2){
+     * @Author: MachineGeek
+     * @Description: 合并两个元素集
+     * @Date: 2021/2/25
+     * @Return: void
+     */
+    public void union(E element1, E element2) {
         Node<E> node1 = findNode(element1);
         Node<E> node2 = findNode(element2);
         // 只要有Null直接返回
-        if(node1 == null || node2 == null){
+        if (node1 == null || node2 == null) {
             return;
         }
         // 元素相等直接返回
-        if(Objects.equals(node1.element,node2.element)){
+        if (Objects.equals(node1.element, node2.element)) {
             return;
         }
         // 比较谁的rank大，小的一方加入大的一方
-        if(node1.rank > node2.rank){
+        if (node1.rank > node2.rank) {
             node2.parent = node1;
-        }else if(node2.rank > node1.rank){
+        } else if (node2.rank > node1.rank) {
             node1.parent = node2;
-        }else{
+        } else {
             node1.parent = node2;
             // rank相等，node1加入node2，并让node2的rank加1
             node2.rank += 1;

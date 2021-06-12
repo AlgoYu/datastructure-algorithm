@@ -75,13 +75,13 @@ public class UnionFindSpliting {
     }
 
     /**
+     * @param index
      * @Author: MachineGeek
      * @Description: 边界检查
      * @Date: 2021/2/24
-     * @param index
      * @Return: void
      */
-    private void rangeCheck ( int index){
+    private void rangeCheck(int index) {
         if (index < 0 || index >= parents.length) {
             throw new RuntimeException("index is out of size");
         }

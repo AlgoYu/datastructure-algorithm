@@ -8,13 +8,13 @@ package cn.machine.geek.structure.queue;
  */
 public class LinkedQueue<E> {
     /**
+     * @param
      * @Author: MachineGeek
      * @Description: 内部节点
      * @Date: 2020/12/21
-     * @param
      * @Return:
      */
-    public class Node<E>{
+    public class Node<E> {
         E element;
         Node<E> prev;
         Node<E> next;
@@ -33,58 +33,58 @@ public class LinkedQueue<E> {
     private int size;
 
     /**
+     * @param
      * @Author: MachineGeek
      * @Description: 返回元素数量
      * @Date: 2020/12/21
-     * @param
      * @Return: int
      */
-    public int size(){
+    public int size() {
         return size;
     }
 
     /**
+     * @param element
      * @Author: MachineGeek
      * @Description: 入队列
      * @Date: 2020/12/21
-     * @param element
      * @Return: void
      */
-    public void enqueue(E element){
-        if(size == 0){
-            first = new Node<>(element,null,null);
+    public void enqueue(E element) {
+        if (size == 0) {
+            first = new Node<>(element, null, null);
             last = first;
-        }else{
-            last.next = new Node<>(element,last,null);
+        } else {
+            last.next = new Node<>(element, last, null);
             last = last.next;
         }
         size++;
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 是否为空
-    * @Date: 2020/12/21
      * @param
-    * @Return: boolean
-    */
-    public boolean isEmpty(){
+     * @Author: MachineGeek
+     * @Description: 是否为空
+     * @Date: 2020/12/21
+     * @Return: boolean
+     */
+    public boolean isEmpty() {
         return size == 0;
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 出队列
-    * @Date: 2020/12/21
      * @param
-    * @Return: E
-    */
-    public E dequeue(){
-        if(size == 0){
+     * @Author: MachineGeek
+     * @Description: 出队列
+     * @Date: 2020/12/21
+     * @Return: E
+     */
+    public E dequeue() {
+        if (size == 0) {
             throw new RuntimeException("范围越界");
         }
         E element = first.element;
-        if(first == last){
+        if (first == last) {
             last = null;
         }
         first = first.next;
@@ -93,13 +93,13 @@ public class LinkedQueue<E> {
     }
 
     /**
-    * @Author: MachineGeek
-    * @Description: 清空队列
-    * @Date: 2020/12/21
      * @param
-    * @Return: void
-    */
-    public void clear(){
+     * @Author: MachineGeek
+     * @Description: 清空队列
+     * @Date: 2020/12/21
+     * @Return: void
+     */
+    public void clear() {
         first = null;
         last = null;
         size = 0;
