@@ -125,43 +125,44 @@ public class RedBlackTree<E> {
             return;
         }
         // 如果父节点是黑色不用处理，如果是红色则需要处理。
-        if (parent.red) {
-            Node<E> grandParent = parent.parent;
-            Node<E> uncle = getBrother(parent);
-            // 如果叔父节点是黑色，需要进行旋转操作，并设置颜色。
-            if (isBlack(uncle)) {
-                // L
-                if (parent == parent.parent.left) {
-                    // LL
-                    if (node == parent.left) {
-                        parent.red = false;
-                        // LR
-                    } else {
-                        leftRotate(parent);
-                        node.red = false;
-                    }
-                    grandParent.red = true;
-                    rightRotate(grandParent);
-                    // R
+        if (!parent.red) {
+            return;
+        }
+        Node<E> grandParent = parent.parent;
+        Node<E> uncle = getBrother(parent);
+        // 如果叔父节点是黑色，需要进行旋转操作，并设置颜色。
+        if (isBlack(uncle)) {
+            // L
+            if (parent == parent.parent.left) {
+                // LL
+                if (node == parent.left) {
+                    parent.red = false;
+                    // LR
                 } else {
-                    // RL
-                    if (node == parent.left) {
-                        rightRotate(parent);
-                        node.red = false;
-                        // RR
-                    } else {
-                        parent.red = false;
-                    }
-                    grandParent.red = true;
-                    leftRotate(grandParent);
+                    leftRotate(parent);
+                    node.red = false;
                 }
-                // 如果叔父节点是红色，需要向上递归染色。
-            } else {
-                parent.red = false;
-                uncle.red = false;
                 grandParent.red = true;
-                afterAdd(grandParent);
+                rightRotate(grandParent);
+                // R
+            } else {
+                // RL
+                if (node == parent.left) {
+                    rightRotate(parent);
+                    node.red = false;
+                    // RR
+                } else {
+                    parent.red = false;
+                }
+                grandParent.red = true;
+                leftRotate(grandParent);
             }
+            // 如果叔父节点是红色，需要向上递归染色。
+        } else {
+            parent.red = false;
+            uncle.red = false;
+            grandParent.red = true;
+            afterAdd(grandParent);
         }
     }
 
